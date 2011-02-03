@@ -556,9 +556,9 @@ ves_icall_System_Array_CreateInstanceImpl (MonoReflectionType *type, MonoArray *
 
 	sizes = alloca (aklass->rank * sizeof(intptr_t) * 2);
 	for (i = 0; i < aklass->rank; ++i) {
-		sizes [i] = mono_array_get (lengths, guint32, i);
+		sizes [i] = mono_array_get (lengths, gint32, i);
 		if (bounds)
-			sizes [i + aklass->rank] = mono_array_get (bounds, guint32, i);
+			sizes [i + aklass->rank] = mono_array_get (bounds, gint32, i);
 		else
 			sizes [i + aklass->rank] = 0;
 	}
