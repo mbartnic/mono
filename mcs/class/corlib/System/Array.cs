@@ -528,43 +528,43 @@ namespace System
 		[ComVisible (false)]
 		public object GetValue (long index)
 		{
-			if (index < 0 || index > Int32.MaxValue)
+			if (index < 0 || index > Int64.MaxValue)
 				throw new ArgumentOutOfRangeException ("index", Locale.GetText (
-					"Value must be >= 0 and <= Int32.MaxValue."));
+					"Value must be >= 0 and <= Int64.MaxValue."));
 
-			return GetValue ((int) index);
+			return GetValueImpl64 (index);
 		}
 
 		[ComVisible (false)]
 		public object GetValue (long index1, long index2)
 		{
-			if (index1 < 0 || index1 > Int32.MaxValue)
+			if (index1 < 0 || index1 > Int64.MaxValue)
 				throw new ArgumentOutOfRangeException ("index1", Locale.GetText (
-					"Value must be >= 0 and <= Int32.MaxValue."));
+					"Value must be >= 0 and <= Int64.MaxValue."));
 
-			if (index2 < 0 || index2 > Int32.MaxValue)
+			if (index2 < 0 || index2 > Int64.MaxValue)
 				throw new ArgumentOutOfRangeException ("index2", Locale.GetText (
-					"Value must be >= 0 and <= Int32.MaxValue."));
+					"Value must be >= 0 and <= Int64.MaxValue."));
 
-			return GetValue ((int) index1, (int) index2);
+			return GetValue64 (new long[] { index1, index2 });
 		}
 
 		[ComVisible (false)]
 		public object GetValue (long index1, long index2, long index3)
 		{
-			if (index1 < 0 || index1 > Int32.MaxValue)
+			if (index1 < 0 || index1 > Int64.MaxValue)
 				throw new ArgumentOutOfRangeException ("index1", Locale.GetText (
-					"Value must be >= 0 and <= Int32.MaxValue."));
+					"Value must be >= 0 and <= Int64.MaxValue."));
 
-			if (index2 < 0 || index2 > Int32.MaxValue)
+			if (index2 < 0 || index2 > Int64.MaxValue)
 				throw new ArgumentOutOfRangeException ("index2", Locale.GetText (
-					"Value must be >= 0 and <= Int32.MaxValue."));
+					"Value must be >= 0 and <= Int64.MaxValue."));
 
-			if (index3 < 0 || index3 > Int32.MaxValue)
+			if (index3 < 0 || index3 > Int64.MaxValue)
 				throw new ArgumentOutOfRangeException ("index3", Locale.GetText (
-					"Value must be >= 0 and <= Int32.MaxValue."));
+					"Value must be >= 0 and <= Int64.MaxValue."));
 
-			return GetValue ((int) index1, (int) index2, (int) index3);
+				return GetValue64 (new long[] { index1, index2, index3 });
 		}
 
 		[ComVisible (false)]
@@ -718,6 +718,15 @@ namespace System
 			return CreateInstanceImpl (elementType, lengths, lowerBounds);
 		}
 
+		[MethodImplAttribute (MethodImplOptions.InternalCall)]
+		internal extern static Array CreateInstanceImpl64 (Type elementType, long[] lengths);
+
+		[MethodImplAttribute (MethodImplOptions.InternalCall)]
+		internal extern object GetValue64 (long[] indices);
+
+		[MethodImplAttribute (MethodImplOptions.InternalCall)]
+		internal extern object GetValueImpl64 (long pos);
+
 		static int [] GetIntArray (long [] values)
 		{
 			int len = values.Length;
@@ -737,7 +746,7 @@ namespace System
 		{
 			if (lengths == null)
 				throw new ArgumentNullException ("lengths");
-			return CreateInstance (elementType, GetIntArray (lengths));
+			return CreateInstanceImpl64 (elementType, lengths);
 		}
 
 		[ComVisible (false)]
@@ -745,7 +754,7 @@ namespace System
 		{
 			if (indices == null)
 				throw new ArgumentNullException ("indices");
-			return GetValue (GetIntArray (indices));
+			return GetValue64 (indices);
 		}
 
 		[ComVisible (false)]

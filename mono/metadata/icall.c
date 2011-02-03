@@ -161,6 +161,28 @@ ves_icall_System_Array_GetValueImpl (MonoObject *this, guint32 pos)
 }
 
 static MonoObject *
+ves_icall_System_Array_GetValueImpl64 (MonoObject *this, guint64 pos)
+{
+	MonoClass *ac;
+	MonoArray *ao;
+	gint32 esize;
+	gpointer *ea;
+
+	MONO_ARCH_SAVE_REGS;
+
+	ao = (MonoArray *)this;
+	ac = (MonoClass *)ao->obj.vtable->klass;
+
+	esize = mono_array_element_size (ac);
+	ea = (gpointer*)((char*)ao->vector + (pos * esize));
+
+	if (ac->element_class->valuetype)
+		return mono_value_box (this->vtable->domain, ac->element_class, ea);
+	else
+		return *ea;
+}
+
+static MonoObject *
 ves_icall_System_Array_GetValue (MonoObject *this, MonoObject *idxs)
 {
 	MonoClass *ac, *ic;
@@ -201,6 +223,48 @@ ves_icall_System_Array_GetValue (MonoObject *this, MonoObject *idxs)
 			ao->bounds [i].lower_bound;
 
 	return ves_icall_System_Array_GetValueImpl (this, pos);
+}
+
+static MonoObject *
+ves_icall_System_Array_GetValue64 (MonoObject *this, MonoObject *idxs)
+{
+	MonoClass *ac, *ic;
+	MonoArray *ao, *io;
+	gint32 i;
+	gint64 pos, *ind;
+
+	MONO_CHECK_ARG_NULL (idxs);
+
+	io = (MonoArray *)idxs;
+	ic = (MonoClass *)io->obj.vtable->klass;
+	
+	ao = (MonoArray *)this;
+	ac = (MonoClass *)ao->obj.vtable->klass;
+
+	g_assert (ic->rank == 1);
+	if (io->bounds != NULL || io->max_length != ac->rank)
+		mono_raise_exception (mono_get_exception_argument (NULL, NULL));
+
+	ind = (gint64 *)io->vector;
+
+	if (ao->bounds == NULL) {
+		if (*ind < 0 || *ind >= ao->max_length)
+			mono_raise_exception (mono_get_exception_index_out_of_range ());
+
+		return ves_icall_System_Array_GetValueImpl64 (this, *ind);
+	}
+	
+	for (i = 0; i < ac->rank; i++)
+		if ((ind [i] < ao->bounds [i].lower_bound) ||
+		    (ind [i] >=  (gint64)ao->bounds [i].length + ao->bounds [i].lower_bound))
+			mono_raise_exception (mono_get_exception_index_out_of_range ());
+
+	pos = ind [0] - ao->bounds [0].lower_bound;
+	for (i = 1; i < ac->rank; i++)
+		pos = pos*ao->bounds [i].length + ind [i] - 
+			ao->bounds [i].lower_bound;
+
+	return ves_icall_System_Array_GetValueImpl64 (this, pos);
 }
 
 static void
@@ -569,21 +633,17 @@ ves_icall_System_Array_CreateInstanceImpl (MonoReflectionType *type, MonoArray *
 }
 
 static MonoArray *
-ves_icall_System_Array_CreateInstanceImpl64 (MonoReflectionType *type, MonoArray *lengths, MonoArray *bounds)
+ves_icall_System_Array_CreateInstanceImpl64 (MonoReflectionType *type, MonoArray *lengths)
 {
 	MonoClass *aklass, *klass;
 	MonoArray *array;
 	uintptr_t *sizes, i;
-	gboolean bounded = FALSE;
 
 	MONO_ARCH_SAVE_REGS;
 
 	MONO_CHECK_ARG_NULL (type);
-	MONO_CHECK_ARG_NULL (lengths);
 
 	MONO_CHECK_ARG (lengths, mono_array_length (lengths) > 0);
-	if (bounds)
-		MONO_CHECK_ARG (bounds, mono_array_length (lengths) == mono_array_length (bounds));
 
 	for (i = 0; i < mono_array_length (lengths); i++) 
 		if ((mono_array_get (lengths, gint64, i) < 0) ||
@@ -593,21 +653,12 @@ ves_icall_System_Array_CreateInstanceImpl64 (MonoReflectionType *type, MonoArray
 	klass = mono_class_from_mono_type (type->type);
 	mono_class_init_or_throw (klass);
 
-	if (bounds && (mono_array_length (bounds) == 1) && (mono_array_get (bounds, gint64, 0) != 0))
-		/* vectors are not the same as one dimensional arrays with no-zero bounds */
-		bounded = TRUE;
-	else
-		bounded = FALSE;
-
-	aklass = mono_bounded_array_class_get (klass, mono_array_length (lengths), bounded);
+	aklass = mono_bounded_array_class_get (klass, mono_array_length (lengths), FALSE);
 
 	sizes = alloca (aklass->rank * sizeof(intptr_t) * 2);
 	for (i = 0; i < aklass->rank; ++i) {
-		sizes [i] = mono_array_get (lengths, guint64, i);
-		if (bounds)
-			sizes [i + aklass->rank] = (mono_array_size_t) mono_array_get (bounds, guint64, i);
-		else
-			sizes [i + aklass->rank] = 0;
+		sizes [i] = mono_array_get (lengths, gint64, i);
+		sizes [i + aklass->rank] = 0;
 	}
 
 	array = mono_array_new_full (mono_object_domain (type), aklass, sizes, (intptr_t*)sizes + aklass->rank);
