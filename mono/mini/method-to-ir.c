@@ -4378,7 +4378,7 @@ mini_emit_inst_for_method (MonoCompile *cfg, MonoMethod *cmethod, MonoMethodSign
 		if (strcmp (cmethod->name + 1, "etGenericValueImpl") == 0)
 			return emit_array_generic_access (cfg, fsig, args, *cmethod->name == 'S');
 
-#ifndef MONO_BIG_ARRAYS
+
 		/*
 		 * This is an inline version of GetLength/GetLowerBound(0) used frequently in
 		 * Array methods.
@@ -4413,12 +4413,18 @@ mini_emit_inst_for_method (MonoCompile *cfg, MonoMethod *cmethod, MonoMethodSign
 				MONO_EMIT_NEW_ICONST (cfg, dreg, 0);
 			MONO_START_BB (cfg, end_bb);
 
+
+#if SIZEOF_VOID_P == 4
 			EMIT_NEW_UNALU (cfg, ins, OP_MOVE, dreg, dreg);
 			ins->type = STACK_I4;
+#else
+			EMIT_NEW_UNALU (cfg, ins, OP_LCONV_TO_OVF_I4, dreg, dreg);
+			ins->type = STACK_I4;
+			ins = mono_decompose_opcode (cfg, ins);
+#endif
 			
 			return ins;
 		}
-#endif
 
  		if (cmethod->name [0] != 'g')
  			return NULL;
