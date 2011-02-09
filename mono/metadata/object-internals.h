@@ -152,7 +152,7 @@
 
 #endif
 
-#ifdef MONO_BIG_ARRAYS
+#if SIZEOF_VOID_P == 8
 typedef uint64_t mono_array_size_t;
 typedef int64_t mono_array_lower_bound_t;
 #define MONO_ARRAY_MAX_INDEX G_MAXINT64
