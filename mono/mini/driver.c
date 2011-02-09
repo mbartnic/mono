@@ -1216,9 +1216,6 @@ static const char info[] =
 #ifdef MONO_SMALL_CONFIG
 	"smallconfig "
 #endif
-#ifdef MONO_BIG_ARRAYS
-	"bigarrays "
-#endif
 #ifdef MONO_DEBUGGER_SUPPORTED
 	"debugger "
 #endif
