@@ -4619,7 +4619,7 @@ mono_array_clone (MonoArray *array)
 }
 
 /* helper macros to check for overflow when calculating the size of arrays */
-#ifdef MONO_BIG_ARRAYS
+#if SIZEOF_VOID_P == 8
 #define MYGUINT64_MAX 0x0000FFFFFFFFFFFFUL
 #define MYGUINT_MAX MYGUINT64_MAX
 #define CHECK_ADD_OVERFLOW_UN(a,b) \
