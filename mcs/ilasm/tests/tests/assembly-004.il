@@ -1,5 +1,5 @@
 // 
-// ModuleTests.cs
+// assembly-004.il
 //  
 // Author:
 //       Alex Rønne Petersen <xtzgzorex@gmail.com>
@@ -23,32 +23,11 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-using System;
-using NUnit.Framework;
 
-namespace Mono.ILAsm.Tests {
-	[TestFixture]
-	public sealed class ModuleTests : AssemblerTester {
-		[Test]
-		public void TestModuleDirective ()
-		{
-			OpenILAsm ()
-				.Input ("module-001.il")
-				.Run ()
-				.Expect (AssemblerResult.Success)
-				.GetModule ()
-				.Expect (x => x.Name == "test001");
-		}
-		
-		[Test]
-		public void TestMultipleModuleDirectives ()
-		{
-			OpenILAsm ()
-				.Input ("module-002.il")
-				.Run ()
-				.Expect (AssemblerTester.AssemblerResult.Success)
-				.GetModule ()
-				.Expect (x => x.Name == "test002");
-		}
-	}
+.assembly test004
+{
+}
+
+.assembly test004asdf
+{
 }
