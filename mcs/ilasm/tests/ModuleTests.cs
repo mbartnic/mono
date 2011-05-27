@@ -32,7 +32,12 @@ namespace Mono.ILAsm.Tests {
 		[Test]
 		public void TestModuleDirective ()
 		{
-			OpenILAsm ().Input ("module-001.il").Argument ("dll").Run ().Expect (AssemblerResult.Success);
+			OpenILAsm ()
+				.Input ("module-001.il")
+				.Run ()
+				.Expect (AssemblerResult.Success)
+				.GetModule ()
+				.Expect (x => x.Name == "test001");
 		}
 	}
 }

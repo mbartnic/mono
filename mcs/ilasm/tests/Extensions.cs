@@ -1,5 +1,5 @@
 // 
-// AssemblyTests.cs
+// Extensions.cs
 //  
 // Author:
 //       Alex Rønne Petersen <xtzgzorex@gmail.com>
@@ -24,50 +24,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using Mono.Cecil;
-using System.Linq;
-using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace Mono.ILAsm.Tests {
-	[TestFixture]
-	public sealed class AssemblyTests : AssemblerTester {
-		[Test]
-		public void TestEmptyAssemblyDirective ()
+	public static class Extensions {
+		public static bool ListEquals<T> (this IList<T> list, IList<T> other)
 		{
-			OpenILAsm ()
-				.Input ("assembly-001.il")
-				.Run ()
-				.Expect (AssemblerResult.Success)
-				.GetModule ()
-				.Expect (x => x.Assembly.Name.Name == "assembly001");
+			if (list.Count != other.Count)
+				return false;
+			
+			for (var i = 0; i < list.Count; i++)
+				if (!list [i].Equals (other [i]))
+					return false;
+			
+			return true;
 		}
 		
-		[Test]
-		public void TestFullAssemblyDirective ()
+		public static IList<T> Pad<T> (this IList<T> list, T value, int count)
 		{
-			OpenILAsm ()
-				.Input ("assembly-002.il")
-				.Run ()
-				.Expect (AssemblerResult.Success)
-				.GetModule ()
-				.Expect (x => x.Assembly.Name.PublicKey.ListEquals (new byte[] {
-					0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09,
-					0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19,
-				}))
-				.Expect (x => x.Assembly.Name.HashAlgorithm == AssemblyHashAlgorithm.SHA1)
-				.Expect (x => x.Assembly.Name.Culture == "en-US")
-				.Expect (x => x.Assembly.Name.Version.Equals (new Version (1, 2, 3, 4)));
-		}
-		
-		[Test]
-		public void TestRawLocale ()
-		{
-			OpenILAsm ()
-				.Input ("assembly-003.il")
-				.Run ()
-				.Expect (AssemblerResult.Success)
-				.GetModule ()
-				.Expect (x => x.Assembly.Name.Culture == "en-US");
+			for (var i = 0; i < count; i++)
+				list.Add (value);
+			
+			return list;
 		}
 	}
 }
