@@ -34,7 +34,7 @@ namespace Mono.ILAsm {
 			// Do everything in Invariant
 			Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 			
-			if (!new DriverMain (args).Run ())
+			if (!new Driver (args).Run ())
 				return 1;
 
 			Report.Message ("Operation completed successfully.");

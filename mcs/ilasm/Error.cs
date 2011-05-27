@@ -1,5 +1,5 @@
 // 
-// Extensions.cs
+// Error.cs
 //  
 // Author:
 //       Alex Rønne Petersen <xtzgzorex@gmail.com>
@@ -24,19 +24,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Collections.Generic;
 
 namespace Mono.ILAsm {
-	public static class Extensions {
-		public static TValue TryGet<TKey, TValue> (this IDictionary<TKey, TValue> dict,
-			TKey key)
-			where TValue : class
-		{
-			TValue value;
-			if (dict.TryGetValue (key, out value))
-				return value;
-			
-			return null;
-		}
+	public enum Error : byte {
+		InternalError = 0,
+		FileNotFound = 1,
+		SyntaxError = 2,
+		NoEntryPoint = 3,
+		MultipleEntryPoints = 4,
+		MultipleAssemblyDirectives = 5,
 	}
 }
