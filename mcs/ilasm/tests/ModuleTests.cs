@@ -35,7 +35,7 @@ namespace Mono.ILAsm.Tests {
 			OpenILAsm ()
 				.Input ("module-001.il")
 				.Run ()
-				.Expect (AssemblerResult.Success)
+				.Expect (ExitCode.Success)
 				.GetModule ()
 				.Expect (x => x.Name == "test001");
 		}
@@ -46,7 +46,7 @@ namespace Mono.ILAsm.Tests {
 			OpenILAsm ()
 				.Input ("module-002.il")
 				.Run ()
-				.Expect (AssemblerTester.AssemblerResult.Success)
+				.Expect (ExitCode.Success)
 				.GetModule ()
 				.Expect (x => x.Name == "test002");
 		}

@@ -1,5 +1,5 @@
 // 
-// CommandLineTests.cs
+// ExitCode.cs
 //  
 // Author:
 //       Alex Rønne Petersen <xtzgzorex@gmail.com>
@@ -24,27 +24,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using NUnit.Framework;
 
-namespace Mono.ILAsm.Tests {
-	[TestFixture]
-	public sealed class CommandLineTests : AssemblerTester {
-		[Test]
-		public void TestUsage ()
-		{
-			OpenILAsm ().Argument ("?").Run ().Expect (ExitCode.Success);
-		}
-		
-		[Test]
-		public void TestAbout ()
-		{
-			OpenILAsm ().Argument ("about", ArgumentType.DoubleDash).Run ().Expect (ExitCode.Success);
-		}
-		
-		[Test]
-		public void TestVersion ()
-		{
-			OpenILAsm ().Argument ("version", ArgumentType.DoubleDash).Run ().Expect (ExitCode.Success);
-		}
+namespace Mono.ILAsm {
+	public enum ExitCode : byte {
+		Success = 0,
+		Error = 1,
+		Abort = 2,
 	}
 }
