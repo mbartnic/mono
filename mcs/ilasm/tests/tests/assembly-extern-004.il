@@ -1,10 +1,10 @@
 // 
-// Extensions.cs
+// assembly-extern-004.il
 //  
 // Author:
 //       Alex Rønne Petersen <xtzgzorex@gmail.com>
 // 
-// Copyright (c) 2011 Novell, Inc (http://www.novell.com)
+// Copyright (c) 2011 Alex Rønne Petersen
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,54 +23,9 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-using System;
-using System.Collections.Generic;
 
-namespace Mono.ILAsm.Tests {
-	internal static class Extensions {
-		public static bool ListEquals<T> (this IList<T> list, IList<T> other)
-		{
-			if (list == null && other != null)
-				return false;
-			
-			if (list != null && other == null)
-				return false;
-			
-			if (list == null && other == null)
-				return true;
-			
-			if (list.Count != other.Count)
-				return false;
-			
-			for (var i = 0; i < list.Count; i++)
-				if (!list [i].Equals (other [i]))
-					return false;
-			
-			return true;
-		}
-		
-		public static IList<T> Pad<T> (this IList<T> list, T value, int count)
-		{
-			for (var i = 0; i < count; i++)
-				list.Add (value);
-			
-			return list;
-		}
-		
-		public static bool Contains<T> (this IList<T> list, params Predicate<T>[] predicates)
-		{
-			bool flag = false;
-			
-			foreach (var item in list) {
-				foreach (var predicate in predicates)
-					if (!(flag = predicate (item)))
-						break;
-				
-				if (flag)
-					return true;
-			}
-			
-			return false;
-		}
-	}
+.assembly extern test004
+{
+	.publickey = (00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19)
+	.publickeytoken = (00 05 10 15 20 25 30 35)
 }

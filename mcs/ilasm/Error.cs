@@ -36,5 +36,6 @@ namespace Mono.ILAsm {
 		SigningFailed = 6,
 		InvalidImageBase = 7,
 		InvalidFileAlignment = 8,
+		UndeclaredModuleReference = 9,
 	}
 }

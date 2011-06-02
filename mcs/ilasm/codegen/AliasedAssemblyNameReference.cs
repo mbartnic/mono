@@ -1,10 +1,10 @@
 // 
-// Extensions.cs
+// AliasedAssemblyNameReference.cs
 //  
 // Author:
 //       Alex Rønne Petersen <xtzgzorex@gmail.com>
 // 
-// Copyright (c) 2011 Novell, Inc (http://www.novell.com)
+// Copyright (c) 2011 Alex Rønne Petersen
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,53 +24,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Collections.Generic;
+using Mono.Cecil;
 
-namespace Mono.ILAsm.Tests {
-	internal static class Extensions {
-		public static bool ListEquals<T> (this IList<T> list, IList<T> other)
+namespace Mono.ILAsm {
+	public sealed class AliasedAssemblyNameReference : AssemblyNameReference {
+		public AliasedAssemblyNameReference (string name, Version version)
+			: base (name, version)
 		{
-			if (list == null && other != null)
-				return false;
-			
-			if (list != null && other == null)
-				return false;
-			
-			if (list == null && other == null)
-				return true;
-			
-			if (list.Count != other.Count)
-				return false;
-			
-			for (var i = 0; i < list.Count; i++)
-				if (!list [i].Equals (other [i]))
-					return false;
-			
-			return true;
 		}
 		
-		public static IList<T> Pad<T> (this IList<T> list, T value, int count)
-		{
-			for (var i = 0; i < count; i++)
-				list.Add (value);
-			
-			return list;
-		}
-		
-		public static bool Contains<T> (this IList<T> list, params Predicate<T>[] predicates)
-		{
-			bool flag = false;
-			
-			foreach (var item in list) {
-				foreach (var predicate in predicates)
-					if (!(flag = predicate (item)))
-						break;
-				
-				if (flag)
-					return true;
-			}
-			
-			return false;
-		}
+		public string Alias { get; set; }
 	}
 }
