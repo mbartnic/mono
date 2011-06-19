@@ -28,6 +28,6 @@
 {
 }
 
-.class test009<class T>
+.class test002<class T>
 {
 }
