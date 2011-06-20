@@ -1,5 +1,5 @@
 // 
-// namespace-003.il
+// data-field-001.il
 //  
 // Author:
 //       Alex Rønne Petersen <xtzgzorex@gmail.com>
@@ -24,15 +24,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-.namespace test003
+.assembly extern mscorlib
 {
-	.namespace B.C
-	{
-		.namespace D.E.F
-		{
-			.class test003_cls
-			{
-			}
-		}
-	}
 }
+
+.data test005 = int32(0x12345678)
+
+.field static uint32 test005_fld at test005

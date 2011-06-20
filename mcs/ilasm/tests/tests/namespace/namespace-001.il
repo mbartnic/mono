@@ -26,4 +26,7 @@
 
 .namespace test001
 {
+	.class test001_cls
+	{
+	}
 }

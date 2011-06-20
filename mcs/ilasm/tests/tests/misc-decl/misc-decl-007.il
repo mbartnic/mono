@@ -1,5 +1,5 @@
 // 
-// namespace-003.il
+// misc-decl-007.il
 //  
 // Author:
 //       Alex Rønne Petersen <xtzgzorex@gmail.com>
@@ -24,15 +24,4 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-.namespace test003
-{
-	.namespace B.C
-	{
-		.namespace D.E.F
-		{
-			.class test003_cls
-			{
-			}
-		}
-	}
-}
+.mscorlib
