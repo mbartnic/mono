@@ -1,5 +1,5 @@
 // 
-// misc-decl-007.il
+// class-layout-002.il
 //  
 // Author:
 //       Alex Rønne Petersen <xtzgzorex@gmail.com>
@@ -24,4 +24,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-.mscorlib
+.assembly extern mscorlib
+{
+}
+
+.class explicit test002
+{
+	.pack 7
+}
