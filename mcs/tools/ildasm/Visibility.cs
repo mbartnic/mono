@@ -26,7 +26,7 @@
 using System;
 
 namespace Mono.ILDasm {
-	public enum Visibility : byte {
+	internal enum Visibility : byte {
 		Public,
 		Private,
 		Family,

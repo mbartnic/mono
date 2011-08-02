@@ -1,5 +1,5 @@
 // 
-// Output.cs
+// TypeDisassembler.cs
 //  
 // Author:
 //       Alex Rønne Petersen <xtzgzorex@gmail.com>
@@ -26,11 +26,6 @@
 using System;
 
 namespace Mono.ILDasm {
-	internal enum Output : byte {
-		Gui,
-		Console,
-		File,
-		RichText,
-		Html,
+	internal sealed class TypeDisassembler : DisassemblerBase {
 	}
 }
