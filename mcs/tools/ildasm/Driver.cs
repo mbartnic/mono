@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading;
 using Mono.Cecil;
 using Mono.Cecil.Mdb;
+//using Mono.Cecil.Mdb;
 
 namespace Mono.ILDasm {
 	public sealed class Driver {
@@ -80,6 +81,9 @@ namespace Mono.ILDasm {
 					ShowMetadataTokens = show_md_tokens,
 					Visibility = visibility,
 				}.Disassemble ();
+
+				output.Flush();
+				output.Close();
 			} catch (Exception ex) {
 				Logger.Error (ex.ToString ());
 				return ExitCode.Error;
