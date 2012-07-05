@@ -93,8 +93,8 @@ namespace Mono.ILDasm {
 		
 		public static string EscapeQString (string str)
 		{
-			var sb = new StringBuilder (str);
-			sb.Replace ("\"", "\\\"").Replace ("\\", "\\\\");
+			var sb = new StringBuilder ();
+			str = str.Replace ("\"", "\\\"").Replace ("\\", "\\\\");
 			
 			foreach (var chr in str) {
 				if (chr == '\t')
@@ -210,7 +210,73 @@ namespace Mono.ILDasm {
 				return type.FullName;
 			}
 		}
-		
+
+		public static string Stringize (ValueType val)
+		{
+			byte[] bytes;
+			var result = new StringBuilder ();
+			var typeCode = Convert.GetTypeCode (val);
+
+			switch (typeCode) {
+			case TypeCode.Boolean:
+				result.Append ("bool");
+				bytes = BitConverter.GetBytes ((bool) val);
+				break;
+			case TypeCode.Byte:
+				bytes = BitConverter.GetBytes ((byte) val);
+				break;
+			case TypeCode.Char:
+				result.Append ("char");
+				bytes = BitConverter.GetBytes ((char) val);
+				break;
+			case TypeCode.Double:
+				result.Append ("float64(");
+				bytes = BitConverter.GetBytes ((double) val);
+				break;
+			case TypeCode.Int16:
+				bytes = BitConverter.GetBytes ((Int16) val);
+				break;
+			case TypeCode.Int32:
+				bytes = BitConverter.GetBytes ((Int32) val);
+				break;
+			case TypeCode.Int64:
+				bytes = BitConverter.GetBytes ((Int64) val);
+				break;
+			case TypeCode.SByte:
+				bytes = BitConverter.GetBytes ((sbyte) val);
+				break;
+			case TypeCode.Single:
+				result.Append ("float32(");
+				bytes = BitConverter.GetBytes ((float) val);
+				break;
+			case TypeCode.UInt16:
+				bytes = BitConverter.GetBytes ((UInt16) val);
+				break;
+			case TypeCode.UInt32:
+				bytes = BitConverter.GetBytes ((UInt32) val);
+				break;
+			case TypeCode.UInt64:
+				bytes = BitConverter.GetBytes ((UInt64) val);
+				break;
+			default: 
+				throw new ArgumentException ("val");
+			};
+
+			if (BitConverter.IsLittleEndian)
+				Array.Reverse (bytes);
+
+			result.Append ("0x");
+			for (int i = 0; i < bytes.Length; i++)
+				result.Append (bytes[i].ToString ("X2"));
+
+			if (typeCode == TypeCode.Single
+				|| typeCode == TypeCode.Double
+				|| typeCode == TypeCode.Char)
+					result.Append (')');
+
+			return result.ToString ();
+        }
+
 		public static string Stringize (TypeReference type)
 		{
 			if (type is ArrayType)
@@ -237,10 +303,12 @@ namespace Mono.ILDasm {
 				var sb = new StringBuilder ();
 				var corName = TypeToName (type);
 				var isCorlib = type.Scope.Name == "mscorlib" && corName != type.FullName;
-				
-				if (!isCorlib)
+
+				if (type.MetadataType == MetadataType.ValueType)
+					sb.Append ("valuetype ");
+				else if (type.MetadataType == MetadataType.Class)
 					sb.Append ("class ");
-				
+
 				if (type.Scope is ModuleReference) {
 					if (type.Scope.Name != Module.Name)
 						sb.AppendFormat ("[.module {0}]", type.Scope.Name);
@@ -315,7 +383,7 @@ namespace Mono.ILDasm {
 		public static string Stringize (OptionalModifierType type)
 		{
 			return Stringize (type.ElementType) +
-				"modopt (" + Stringize (type.ModifierType) + ")";
+				" modopt (" + Stringize (type.ModifierType) + ")";
 		}
 		
 		public static string Stringize (RequiredModifierType type)

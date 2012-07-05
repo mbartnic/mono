@@ -175,47 +175,45 @@ namespace Mono.ILDasm {
 			}
 			
 			Writer.WriteLine (")");
-			
-			if (method.ImplAttributes != 0) {
-				Writer.Indent ();
-				Writer.WriteIndented (string.Empty);
-				
-				if (method.IsNative)
-					Writer.Write ("native ");
-				
-				if (method.IsIL)
-					Writer.Write ("cil ");
-				
-				if (method.IsManaged)
-					Writer.Write ("managed ");
-				
-				if (method.IsUnmanaged)
-					Writer.Write ("unmanaged ");
-				
-				if (method.IsForwardRef)
-					Writer.Write ("forwardref ");
-				
-				if (method.IsPreserveSig)
-					Writer.Write ("preservesig ");
-				
-				if (method.IsRuntime)
-					Writer.Write ("runtime ");
-				
-				if (method.IsInternalCall)
-					Writer.Write ("internalcall ");
-				
-				if (method.IsSynchronized)
-					Writer.Write ("synchronized ");
-				
-				if (method.NoInlining)
-					Writer.Write ("noinlining ");
-				
-				if (method.NoOptimization)
-					Writer.Write ("nooptimization ");
-				
-				Writer.WriteLine ();
-				Writer.Dedent ();
-			}
+
+			Writer.Indent ();
+			Writer.WriteIndented (string.Empty);
+
+			if (method.IsNative)
+				Writer.Write ("native ");
+
+			if (method.IsIL)
+				Writer.Write ("cil ");
+
+			if (method.IsManaged)
+				Writer.Write ("managed ");
+
+			if (method.IsUnmanaged)
+				Writer.Write ("unmanaged ");
+
+			if (method.IsForwardRef)
+				Writer.Write ("forwardref ");
+
+			if (method.IsPreserveSig)
+				Writer.Write ("preservesig ");
+
+			if (method.IsRuntime)
+				Writer.Write ("runtime ");
+
+			if (method.IsInternalCall)
+				Writer.Write ("internalcall ");
+
+			if (method.IsSynchronized)
+				Writer.Write ("synchronized ");
+
+			if (method.NoInlining)
+				Writer.Write ("noinlining ");
+
+			if (method.NoOptimization)
+				Writer.Write ("nooptimization ");
+
+			Writer.WriteLine ();
+			Writer.Dedent ();
 			
 			Writer.OpenBracket ();
 			
@@ -268,6 +266,7 @@ namespace Mono.ILDasm {
 			
 			Writer.WriteLine ();
 			
+			var tryCount = 0;
 			var ehCount = 0;
 			var filterCount = 0;
 			
@@ -275,16 +274,16 @@ namespace Mono.ILDasm {
 				if (!module.RawExceptionHandlers) {
 					foreach (var ex in method.Body.ExceptionHandlers) {
 						if (instr == ex.TryStart) {
-							ehCount++;
+							tryCount++;
 							
 							Writer.WriteIndentedLine (".try");
 							Writer.OpenBracket ();
 						}
 						
 						if (instr == ex.HandlerStart) {
-							if (ehCount > 0) {
-								ehCount--;
-								
+							if (tryCount > 0 && ex.HandlerType != ExceptionHandlerType.Filter) {
+								tryCount--;
+
 								Writer.CloseBracket ();
 							}
 							
@@ -310,17 +309,23 @@ namespace Mono.ILDasm {
 							}
 							
 							Writer.OpenBracket ();
+							ehCount++;
 						}
-						
+
+						if (instr == ex.HandlerEnd) {
+							ehCount--;
+							Writer.CloseBracket ();
+						}
+
 						if (instr == ex.FilterStart) {
 							filterCount++;
+
+							tryCount--;
+							Writer.CloseBracket ();
 							
 							Writer.WriteIndentedLine ("filter");
 							Writer.OpenBracket ();
 						}
-						
-						if (instr == ex.HandlerEnd)
-							Writer.CloseBracket ();
 					}
 				}
 				
@@ -375,7 +380,7 @@ namespace Mono.ILDasm {
 					} else if (arg is string) {
 						Writer.Write ("\"{0}\"", EscapeQString ((string) arg));
 					} else // Integers and floats.
-						Writer.Write (arg.ToString ());
+						Writer.Write (Stringize ((ValueType) arg));
 				}
 				
 				Writer.WriteLine ();
