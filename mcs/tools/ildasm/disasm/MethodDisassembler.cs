@@ -101,8 +101,12 @@ namespace Mono.ILDasm {
 			
 			if (method.IsUnmanagedExport)
 				Writer.Write ("unmanagedexp ");
-			
-			// TODO: Write P/Invoke info.
+
+			if (method.IsPInvokeImpl) {
+				WritePlatformInvoke ();
+				Writer.Indent ();
+				Writer.WriteIndented (string.Empty);
+			}
 			
 			if (method.HasThis)
 				Writer.Write ("instance ");
@@ -164,14 +168,31 @@ namespace Mono.ILDasm {
 			}
 			
 			Writer.Write (" (");
-			
+
+			if (method.Parameters.Count > 1) {
+				Writer.Indent ();
+				Writer.Indent ();
+				Writer.Indent ();
+			}
+
 			for (var i = 0; i < method.Parameters.Count; i++) {
 				var param = method.Parameters [i];
-				Writer.Write ("{0}{1}", Stringize (param.ParameterType),
-					EscapeOrEmpty (param.Name));
+
+				string str = Stringize (param);
+				
+				if (i == 0)
+					Writer.Write (str);
+				else
+					Writer.WriteIndented (str);
 				
 				if (i != method.Parameters.Count - 1)
-					Writer.Write (", ");
+					Writer.WriteLine (",");
+			}
+
+			if (method.Parameters.Count > 1) {
+				Writer.Dedent ();
+				Writer.Dedent ();
+				Writer.Dedent ();
 			}
 			
 			Writer.WriteLine (")");
@@ -214,10 +235,14 @@ namespace Mono.ILDasm {
 
 			Writer.WriteLine ();
 			Writer.Dedent ();
+
+			if (method.HasPInvokeInfo)
+				Writer.Dedent ();
 			
 			Writer.OpenBracket ();
 			
 			WriteEntryPoint ();
+			WriteDefaultParameterValues ();
 			WriteMaxStack ();
 			WriteLocals ();
 			WriteInstructions ();
@@ -225,6 +250,72 @@ namespace Mono.ILDasm {
 			Writer.CloseBracket ();
 			
 			Writer.WriteLine ();
+		}
+
+		void WriteDefaultParameterValues ()
+		{
+			var needNewLine = false;
+			for (int i = 0; i < method.Parameters.Count; i++) {
+				var param = method.Parameters[i];
+				if (param.HasDefault) {
+					needNewLine = true;
+
+					Writer.WriteIndented (".param [{0}] = ", i + 1);
+					if (param.Constant is string)
+						Writer.WriteLine ("\"{0}\"", param.Constant.ToString ());
+					else if (param.Constant is ValueType)
+						Writer.WriteLine (Stringize ((ValueType) param.Constant));
+					else if (param.Constant == null)
+						Writer.WriteLine ("nullref");
+					else
+						throw new ArgumentException (".param type = " + param.Constant.GetType ());
+					//TODO: verify that there are no more options of default parameters
+				}
+			}
+
+			if (needNewLine)
+				Writer.WriteLine();
+		}
+
+		void WritePlatformInvoke ()
+		{
+			var p = method.PInvokeInfo;
+			Writer.Write ("pinvokeimpl (\"{0}\"", p.Module.Name);
+
+			if (!p.EntryPoint.Equals(method.Name))
+				Writer.Write (" as \"{0}\"", p.EntryPoint);
+
+			if (p.IsCallConvCdecl)
+				Writer.Write (" cdecl");
+
+			if (p.IsCallConvFastcall)
+				Writer.Write (" fastcall");
+
+			if (p.IsCallConvStdCall)
+				Writer.Write (" stdcall");
+
+			if (p.IsCallConvThiscall)
+				Writer.Write (" thiscall");
+
+			if (p.IsCallConvWinapi)
+				Writer.Write (" winapi");
+
+			if (p.IsCharSetAnsi)
+				Writer.Write (" ansi");
+
+			if (p.IsCharSetAuto)
+				Writer.Write (" autochar");
+
+			if (p.IsCharSetUnicode)
+				Writer.Write (" unicode");
+
+			if (p.SupportsLastError)
+				Writer.Write (" lasterr");
+
+			if (p.IsNoMangle)
+				Writer.Write (" nomangle");
+
+			Writer.WriteLine (")");
 		}
 		
 		void WriteMaxStack ()
@@ -379,8 +470,8 @@ namespace Mono.ILDasm {
 						Writer.Write (Stringize ((FieldReference) arg));
 					} else if (arg is string) {
 						Writer.Write ("\"{0}\"", EscapeQString ((string) arg));
-					} else // Integers and floats.
-						Writer.Write (Stringize ((ValueType) arg));
+					} else
+						Writer.Write (Stringize ((ValueType) arg, true));
 				}
 				
 				Writer.WriteLine ();

@@ -79,7 +79,9 @@ namespace Mono.ILDasm {
 			if (field.Offset != -1)
 				Writer.Write ("[{0}] ", field.Offset);
 			
-			// TODO: Write marshal clause.
+			//TODO: complete field marshaling
+			if (field.HasMarshalInfo)
+				Writer.Write ("marshal ({0}) ", Stringize(field.MarshalInfo));
 			
 			Writer.Write ("{0} ", Stringize (field.FieldType));
 			Writer.Write (Escape (field.Name));
@@ -92,31 +94,31 @@ namespace Mono.ILDasm {
 				var val = field.Constant;
 				
 				if (val is string)
-					Writer.Write ("\"{0}\"", EscapeQString ((string) val));
+					Writer.Write ("\"{0}\"", Stringize(EscapeQString ((string) val)));
 				else if (val is bool)
 					Writer.Write ("bool ({0})", (bool) val ? "true" : "false");
 				else if (val is char)
 					Writer.Write ("char ({0})", (int) (char) val);
 				else if (val is float)
-					Writer.Write ("float32 ({0})", val);
+					Writer.Write ("float32 ({0})", NumberToHexString((float) val));
 				else if (val is double)
-					Writer.Write ("float64 ({0})", val);
+					Writer.Write ("float64 ({0})", NumberToHexString((double) val));
 				else if (val is byte)
-					Writer.Write ("uint8 ({0})", val);
+					Writer.Write ("uint8 ({0})", NumberToHexString((byte) val));
 				else if (val is sbyte)
-					Writer.Write ("int8 ({0})", val);
+					Writer.Write ("int8 ({0})", NumberToHexString((sbyte) val));
 				else if (val is short)
-					Writer.Write ("int16 ({0})", val);
+					Writer.Write ("int16 ({0})", NumberToHexString((short) val));
 				else if (val is ushort)
-					Writer.Write ("uint16 ({0})", val);
+					Writer.Write ("uint16 ({0})", NumberToHexString((ushort) val));
 				else if (val is int)
-					Writer.Write ("int32 ({0})", val);
+					Writer.Write ("int32 ({0})", NumberToHexString((int) val));
 				else if (val is uint)
-					Writer.Write ("uint32 ({0})", val);
+					Writer.Write ("uint32 ({0})", NumberToHexString((uint) val));
 				else if (val is long)
-					Writer.Write ("int64 ({0})", val);
+					Writer.Write ("int64 ({0})", NumberToHexString((long) val));
 				else if (val is ulong)
-					Writer.Write ("uint64 ({0})", val);
+					Writer.Write ("uint64 ({0})", NumberToHexString((ulong) val));
 				else if (val is byte[])
 					Writer.Write ("bytearray ", ToByteList ((byte[]) val));
 				else

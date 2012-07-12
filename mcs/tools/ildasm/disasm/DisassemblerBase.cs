@@ -29,11 +29,12 @@ using System.IO;
 using System.Text;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
+using System.Collections.Generic;
 
 namespace Mono.ILDasm {
 	internal abstract class DisassemblerBase {
 		public CodeWriter Writer { get; private set; }
-		
+
 		protected DisassemblerBase (TextWriter output)
 		{
 			Writer = new CodeWriter (output);
@@ -139,7 +140,27 @@ namespace Mono.ILDasm {
 		{
 			return char.IsLetterOrDigit (chr) || "_$@?`.".IndexOf (chr) != -1;
 		}
-		
+
+		public static string Stringize (MarshalInfo marshalInfo)
+		{
+			if (marshalInfo is ArrayMarshalInfo)
+				return Stringize ((ArrayMarshalInfo) marshalInfo);
+			if (marshalInfo is CustomMarshalInfo) { }
+			if (marshalInfo is FixedArrayMarshalInfo) { }
+			if (marshalInfo is FixedSysStringMarshalInfo) { }
+			if (marshalInfo is SafeArrayMarshalInfo) { }
+
+			return marshalInfo.NativeType.ToString().ToLower();
+		}
+
+		private static string Stringize (ArrayMarshalInfo mInfo)
+		{
+			//var sb = new StringBuilder();
+			//sb.Append(Stringize(mInfo.NativeType));
+			//TODO: stringize array marshal information
+			return string.Empty;
+		}
+
 		public static string Stringize (MethodCallingConvention conv)
 		{
 			switch (conv)
@@ -211,71 +232,182 @@ namespace Mono.ILDasm {
 			}
 		}
 
-		public static string Stringize (ValueType val)
+		public static string NumberToHexString (sbyte val)
 		{
-			byte[] bytes;
+			return string.Format ("{0}", val.ToString ("X2"));
+		}
+
+		public static string NumberToHexString (byte val)
+		{
+			return string.Format ("{0}", val.ToString ("X2"));
+		}
+
+		public static string NumberToHexString (float val, bool convertToBigEndian = true)
+		{
+			return bytesToHex (BitConverter.GetBytes (val), convertToBigEndian);
+		}
+
+		public static string NumberToHexString (double val, bool convertToBigEndian = true)
+		{
+			return bytesToHex (BitConverter.GetBytes (val), convertToBigEndian);
+		}
+
+		public static string NumberToHexString (short val, bool convertToBigEndian = true)
+		{
+			return bytesToHex (BitConverter.GetBytes (val), convertToBigEndian);
+		}
+
+		public static string NumberToHexString (ushort val, bool convertToBigEndian = true)
+		{
+			return bytesToHex (BitConverter.GetBytes (val), convertToBigEndian);
+		}
+
+		public static string NumberToHexString (int val, bool convertToBigEndian = true)
+		{
+			return bytesToHex (BitConverter.GetBytes (val), convertToBigEndian);
+		}
+
+		public static string NumberToHexString (uint val, bool convertToBigEndian = true)
+		{
+			return bytesToHex (BitConverter.GetBytes (val), convertToBigEndian);
+		}
+
+		public static string NumberToHexString (long val, bool convertToBigEndian = true)
+		{
+			return bytesToHex (BitConverter.GetBytes (val), convertToBigEndian);
+		}
+
+		public static string NumberToHexString (ulong val, bool convertToBigEndian = true)
+		{
+			return bytesToHex (BitConverter.GetBytes (val), convertToBigEndian);
+		}
+
+		public static string NumberToHexString (char val, bool convertToBigEndian = true)
+		{
+			return bytesToHex (BitConverter.GetBytes (val), convertToBigEndian);
+		}
+
+		private static string bytesToHex(byte[] bytes, bool convertToBigEndian = true)
+		{
+			if (BitConverter.IsLittleEndian && convertToBigEndian)
+				Array.Reverse (bytes);
+
+			var sb = new StringBuilder ();
+
+			sb.Append ("0x");
+			for (int i = 0; i < bytes.Length; i++)
+				sb.Append (bytes[i].ToString ("X2"));
+
+			return sb.ToString ();
+		}
+
+		public static string Stringize (ValueType val, bool shortForm = false)
+		{
 			var result = new StringBuilder ();
 			var typeCode = Convert.GetTypeCode (val);
 
 			switch (typeCode) {
 			case TypeCode.Boolean:
-				result.Append ("bool");
-				bytes = BitConverter.GetBytes ((bool) val);
-				break;
+				return string.Format ("bool ({0})", (bool) val ? "true" : "false");
+			case TypeCode.Empty:
+				return string.Format ("nullref");
 			case TypeCode.Byte:
-				bytes = BitConverter.GetBytes ((byte) val);
-				break;
+				if (!shortForm)
+					return string.Format ("uint8 ({0})", val);
+				return val.ToString();
 			case TypeCode.Char:
-				result.Append ("char");
-				bytes = BitConverter.GetBytes ((char) val);
-				break;
-			case TypeCode.Double:
-				result.Append ("float64(");
-				bytes = BitConverter.GetBytes ((double) val);
-				break;
-			case TypeCode.Int16:
-				bytes = BitConverter.GetBytes ((Int16) val);
-				break;
-			case TypeCode.Int32:
-				bytes = BitConverter.GetBytes ((Int32) val);
-				break;
-			case TypeCode.Int64:
-				bytes = BitConverter.GetBytes ((Int64) val);
-				break;
-			case TypeCode.SByte:
-				bytes = BitConverter.GetBytes ((sbyte) val);
-				break;
+				if (!shortForm)
+					return string.Format ("char ({0})", NumberToHexString ((char) val));
+				else
+					return NumberToHexString ((char) val);
 			case TypeCode.Single:
-				result.Append ("float32(");
-				bytes = BitConverter.GetBytes ((float) val);
-				break;
+				return string.Format ("float32 ({0})", NumberToHexString ((float) val));
+			case TypeCode.Double:
+				return string.Format ("float64 ({0})", NumberToHexString ((double) val));
+			case TypeCode.Int16:
+				if (!shortForm)
+					return string.Format ("int16 ({0})", (Int16) val);
+				else
+					return NumberToHexString ((Int16) val);
+			case TypeCode.Int32:
+				if (!shortForm)
+					return string.Format ("int32 ({0})", (Int32) val);
+				else
+					return NumberToHexString ((Int32) val);
+			case TypeCode.Int64:
+				if (!shortForm)
+					return string.Format ("int64 ({0})", (Int64) val);
+				else
+					return NumberToHexString ((Int64) val);
+			case TypeCode.SByte:
+				if (!shortForm)
+					return string.Format ("int8({0})", val);
+				return val.ToString();
 			case TypeCode.UInt16:
-				bytes = BitConverter.GetBytes ((UInt16) val);
-				break;
+				if (!shortForm)
+					return string.Format ("uint16 ({0})", (UInt16) val);
+				else
+					return NumberToHexString ((UInt16) val);
 			case TypeCode.UInt32:
-				bytes = BitConverter.GetBytes ((UInt32) val);
-				break;
+				if (!shortForm)
+					return string.Format ("uint32 ({0})", (UInt32) val);
+				else
+					return NumberToHexString ((UInt32) val);
 			case TypeCode.UInt64:
-				bytes = BitConverter.GetBytes ((UInt64) val);
-				break;
-			default: 
+				if (!shortForm)
+					return string.Format ("uint64 ({0})", (UInt64) val);
+				else
+					return NumberToHexString ((UInt64) val);
+			default:
 				throw new ArgumentException ("val");
 			};
-
-			if (BitConverter.IsLittleEndian)
-				Array.Reverse (bytes);
-
-			result.Append ("0x");
-			for (int i = 0; i < bytes.Length; i++)
-				result.Append (bytes[i].ToString ("X2"));
-
-			if (typeCode == TypeCode.Single
-				|| typeCode == TypeCode.Double
-				|| typeCode == TypeCode.Char)
-					result.Append (')');
-
-			return result.ToString ();
         }
+
+		public static string Stringize (String str)
+		{
+			var chars = str.ToCharArray ();
+
+			if (Array.Exists<char> (chars, x => (int) x > 0x7f)) { //handle non-ASCII
+				var sb = new StringBuilder ();
+				var bytearray = new byte[chars.Length * 2];
+
+				sb.Append ("bytearray ");
+
+				for (int i = 0; i < chars.Length; i++) {
+					var bytes = BitConverter.GetBytes (chars[i]);
+					if (BitConverter.IsLittleEndian)
+						Array.Reverse (bytes);
+
+					bytearray[i * 2] = bytes[0];
+					bytearray[i * 2 + 1] = bytes[1];
+				}
+
+				sb.Append (ToByteList (bytearray));
+
+				return sb.ToString();
+			} else //ASCII characters
+				return str;
+		}
+
+		public static string Stringize (ParameterDefinition param)
+		{
+			var sb = new StringBuilder ();
+
+			if (param.IsIn)
+				sb.Append ("[in]");
+			if (param.IsOptional)
+				sb.Append ("[opt]");
+			if (param.IsOut)
+				sb.Append ("[out]");
+
+			sb.Append (Stringize (param.ParameterType));
+
+			//TODO: write marshal clause
+
+			sb.Append (EscapeOrEmpty (param.Name));
+
+			return sb.ToString ();
+		}
 
 		public static string Stringize (TypeReference type)
 		{
