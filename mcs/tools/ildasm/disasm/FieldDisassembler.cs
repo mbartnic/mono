@@ -79,7 +79,6 @@ namespace Mono.ILDasm {
 			if (field.Offset != -1)
 				Writer.Write ("[{0}] ", field.Offset);
 			
-			//TODO: complete field marshaling
 			if (field.HasMarshalInfo)
 				Writer.Write ("marshal ({0}) ", Stringize(field.MarshalInfo));
 			

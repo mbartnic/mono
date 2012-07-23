@@ -1467,6 +1467,13 @@ marshal_info		:
 					Size = (int) $4,
 				};
 			}
+			| K_FIXED K_ARRAY OPEN_BRACKET int32 CLOSE_BRACKET marshal_type
+			{
+				$$ = new FixedArrayMarshalInfo {
+					Size = (int) $4,
+					ElementType = (NativeType) $6,
+				};
+			}
 			| marshal_type STAR
 			{
 				report.WriteWarning (Warning.DeprecatedNativeType,
@@ -1498,7 +1505,7 @@ marshal_info		:
 				$$ = new ArrayMarshalInfo {
 					ElementType = (NativeType) $1,
 					Size = (int) $3,
-					SizeParameterMultiplier = (int) $5,
+					SizeParameterIndex = (int) $5,
 				};
 			}
 			| marshal_type OPEN_BRACKET PLUS int32 CLOSE_BRACKET
@@ -1507,7 +1514,7 @@ marshal_info		:
 
 				$$ = new ArrayMarshalInfo {
 					ElementType = (NativeType) $1,
-					SizeParameterMultiplier = (int) $4,
+					SizeParameterIndex = (int) $4,
 				};
 			}
 			| K_SAFEARRAY safearray_type
@@ -1521,6 +1528,12 @@ marshal_info		:
 				// TODO: What do we do with the string?
 				$$ = new SafeArrayMarshalInfo {
 					ElementType = (VariantType) $2,
+				};
+			}
+			| OPEN_BRACKET int32 CLOSE_BRACKET
+			{
+				$$ = new ArrayMarshalInfo() {
+					Size = (int)$2,
 				};
 			}
 			| marshal_type
@@ -2260,6 +2273,10 @@ sig_arg_list 		: sig_arg
 			;
 
 sig_marshal_clause	:
+			| K_MARSHAL OPEN_PARENS marshal_info CLOSE_PARENS
+			{
+				$$ = (MarshalInfo) $3 ;
+			}
 			| K_MARSHAL OPEN_PARENS marshal_type CLOSE_PARENS
 			{
 				$$ = new MarshalInfo ((NativeType) $3);

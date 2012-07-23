@@ -119,8 +119,9 @@ namespace Mono.ILDasm {
 			// TODO: Write return value attributes (Cecil limitation).
 			
 			Writer.Write ("{0} ", Stringize (method.ReturnType));
-			
-			// TODO: Write marshal clause.
+
+			if (method.MethodReturnType.HasMarshalInfo)
+				Writer.Write ("marshal ({0})", Stringize (method.MethodReturnType.MarshalInfo));			
 			
 			Writer.Write ("{0}", Escape (method.Name));
 			
@@ -262,14 +263,13 @@ namespace Mono.ILDasm {
 
 					Writer.WriteIndented (".param [{0}] = ", i + 1);
 					if (param.Constant is string)
-						Writer.WriteLine ("\"{0}\"", param.Constant.ToString ());
+						Writer.WriteLine ("\"{0}\"", Stringize((string) param.Constant));
 					else if (param.Constant is ValueType)
 						Writer.WriteLine (Stringize ((ValueType) param.Constant));
 					else if (param.Constant == null)
 						Writer.WriteLine ("nullref");
 					else
 						throw new ArgumentException (".param type = " + param.Constant.GetType ());
-					//TODO: verify that there are no more options of default parameters
 				}
 			}
 

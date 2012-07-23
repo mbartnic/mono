@@ -145,20 +145,152 @@ namespace Mono.ILDasm {
 		{
 			if (marshalInfo is ArrayMarshalInfo)
 				return Stringize ((ArrayMarshalInfo) marshalInfo);
-			if (marshalInfo is CustomMarshalInfo) { }
-			if (marshalInfo is FixedArrayMarshalInfo) { }
-			if (marshalInfo is FixedSysStringMarshalInfo) { }
-			if (marshalInfo is SafeArrayMarshalInfo) { }
+			if (marshalInfo is CustomMarshalInfo)
+				return Stringize ((CustomMarshalInfo) marshalInfo);
+			if (marshalInfo is FixedArrayMarshalInfo)
+				return Stringize ((FixedArrayMarshalInfo) marshalInfo);
+			if (marshalInfo is FixedSysStringMarshalInfo)
+				return Stringize ((FixedSysStringMarshalInfo) marshalInfo);
+			if (marshalInfo is SafeArrayMarshalInfo)
+				return Stringize ((SafeArrayMarshalInfo) marshalInfo);
 
-			return marshalInfo.NativeType.ToString().ToLower();
+			return Stringize(marshalInfo.NativeType);
+		}
+
+		public static string Stringize (CustomMarshalInfo mInfo)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public static string Stringize (SafeArrayMarshalInfo mInfo)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public static string Stringize (NativeType nType)
+		{
+			switch (nType) {
+			case NativeType.FixedSysString:
+				return "fixed sysstring ";
+			case NativeType.FixedArray:
+				return "fixed array ";
+			case NativeType.Struct:
+				return "struct ";
+			case NativeType.Boolean:
+				return "bool ";
+			case NativeType.I1:
+				return "int8 ";
+			case NativeType.I2:
+				return "int16 ";
+			case NativeType.I4:
+				return "int32 ";
+			case NativeType.I8:
+				return "int64 ";
+			case NativeType.U1:
+				return "unsigned int8 ";
+			case NativeType.U2:
+				return "unsigned int16 ";
+			case NativeType.U4:
+				return "unsigned int32 ";
+			case NativeType.U8:
+				return "unsigned int64 ";
+			case NativeType.Currency:
+				return "currency ";
+			case NativeType.BStr:
+				return "bstr ";
+			case NativeType.LPStr:
+				return "lpstr ";
+			case NativeType.LPWStr:
+				return "lpwstr ";
+			case NativeType.LPTStr:
+				return "lptstr ";
+			case NativeType.Max:
+			case NativeType.None:
+				return string.Empty;
+			case NativeType.R4:
+				return "float32 ";
+			case NativeType.R8:
+				return "float64 ";
+			case NativeType.IUnknown:
+				return "iunknown ";
+			case NativeType.LPStruct:
+				return "lpstruct ";
+			case NativeType.CustomMarshaler:
+				return "custom ";
+			case NativeType.Error:
+				return "error ";
+			case NativeType.IDispatch:
+				return "idispatch ";
+			case NativeType.VariantBool:
+				return "variant bool ";
+			case NativeType.ASAny:
+				return "as any ";
+			case NativeType.SafeArray:
+				return "safearray ";
+			case NativeType.Func:
+				return "method ";
+			case NativeType.TBStr:
+				return "tbstr ";
+			case NativeType.ANSIBStr:
+				return "ansi bstr ";
+			case NativeType.ByValStr:
+				return "byvalstr ";
+			case NativeType.Array:
+				return "array ";
+			default:
+				throw new NotImplementedException (nType.ToString());
+			};
+		}
+
+		public static string Stringize (FixedArrayMarshalInfo mInfo)
+		{
+			return string.Format ("{0}[{1}] {2}", Stringize(mInfo.NativeType), 
+				mInfo.Size != -1 ? mInfo.Size.ToString() : string.Empty,
+				Stringize(mInfo.ElementType));
+		}
+
+		public static string Stringize (FixedSysStringMarshalInfo mInfo)
+		{
+			return string.Format ("{0}[{1}]", Stringize(mInfo.NativeType), mInfo.Size);
 		}
 
 		private static string Stringize (ArrayMarshalInfo mInfo)
 		{
-			//var sb = new StringBuilder();
-			//sb.Append(Stringize(mInfo.NativeType));
-			//TODO: stringize array marshal information
-			return string.Empty;
+			//mbartnic: some magic done by microsoft
+			/*
+			 * wrote following based on ms ildasm to be Microsoft - compatible
+			 * 
+			 * ecma specifies (Partition II Chapter 7.4) that SizeParameterIndex should be 
+			 * greater than 0 if in use. 
+			 * [Quote]
+			 * .method int32 M2( int32 marshal(int32), bool[] marshal(bool[+1]) ) 
+			 * Method M2 takes two arguments: an int32, and an array of bools: the number of elements in that array is 
+			 * given by the value of the first parameter.	[/Quote]
+			 * 
+			 * if we disassemble following method:
+			 * void marshal_param_LPArray_SizeParamIndex ([MarshalAs (UnmanagedType.LPArray, ArraySubType = UnmanagedType.R8, SizeParamIndex=0)] object crazyArray) { return; }
+			 * 
+			 * we obtain following il code (made by ms ildasm):
+			 * .method private hidebysig instance void 
+			 *		marshal_param_LPArray_SizeParamIndex(object  marshal( float64[ + 0]) crazyArray) cil managed { ret }
+			 *		
+			 * so we obtain theoretically meaningless ' + 0' in marshalled array which according to spec
+			 * should not be there
+			*/
+
+			var sb = new StringBuilder ();
+			sb.Append (Stringize (mInfo.ElementType));
+			sb.Append ("[");
+			if (mInfo.Size == -1 && mInfo.SizeParameterIndex != -1)
+				sb.Append ("+" + mInfo.SizeParameterIndex);
+			else if (mInfo.Size != -1) {
+				sb.Append (mInfo.Size);
+				if (mInfo.SizeParameterIndex > 0
+					|| (mInfo.SizeParameterIndex == 0 && mInfo.SizeParameterMultiplier == -1))
+					sb.Append ("+" + mInfo.SizeParameterIndex);
+			}
+			sb.Append ("]");
+			return sb.ToString ();
 		}
 
 		public static string Stringize (MethodCallingConvention conv)
@@ -402,7 +534,8 @@ namespace Mono.ILDasm {
 
 			sb.Append (Stringize (param.ParameterType));
 
-			//TODO: write marshal clause
+			if (param.HasMarshalInfo)
+				sb.AppendFormat (" marshal ({0}) ", Stringize(param.MarshalInfo));
 
 			sb.Append (EscapeOrEmpty (param.Name));
 
