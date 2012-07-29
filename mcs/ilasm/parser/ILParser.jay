@@ -1701,7 +1701,7 @@ field_decl		: D_FIELD repeat_opt field_attr marshal_spec type id at_opt init_opt
 					mapping.Add (field, dataLoc);
 				}
 
-				if ($8 != null) 
+				if ($8 != null)
 					field.Constant = $8 is Null ? null : $8;
 
 				if (isGlobal)
@@ -2410,8 +2410,10 @@ method_decl		: D_EMITBYTE int32
 
 				codegen.CurrentCustomAttributeProvider = param;
 
-				if ($5 != null)
+				if ($5 != null) {
 					param.Constant = $5 is Null ? null : $5;
+					param.HasDefault = true;
+				}
 			}
 			| param_type_decl
 			| id COLON

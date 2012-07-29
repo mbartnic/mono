@@ -469,7 +469,7 @@ namespace Mono.ILDasm {
 						
 						Writer.Write (Stringize ((FieldReference) arg));
 					} else if (arg is string) {
-						Writer.Write ("\"{0}\"", EscapeQString ((string) arg));
+						Writer.Write ("\"{0}\"", Stringize (EscapeQString ((string) arg)));
 					} else  // Integers and floats.
 						Writer.Write (Stringize ((ValueType) arg, true));
 				}

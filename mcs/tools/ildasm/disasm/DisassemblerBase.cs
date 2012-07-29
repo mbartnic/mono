@@ -163,7 +163,7 @@ namespace Mono.ILDasm {
 
 			sb.Append ("custom (");
 
-			if (mInfo.UnmanagedType != null && !mInfo.UnmanagedType.Equals (string.Empty))
+			if (mInfo.UnmanagedType != null && mInfo.UnmanagedType != string.Empty)
 				sb.AppendFormat ("\"{0}\"", mInfo.UnmanagedType);
 			else 
 				sb.AppendFormat ("\"{0}, {1}\"", mInfo.ManagedType.FullName, mInfo.ManagedType.Scope);
@@ -227,8 +227,8 @@ namespace Mono.ILDasm {
 			case VariantType.None:
 				return string.Empty;
 			default:	
-						//TODO: following variant types are not supported in cecil,
-						//but we can still disassemble them
+						//following variant types are deprecated and are NOT supported in Cecil
+						//resulting code won't be assembled by ilasm
 				switch ((int) vType) {
 				case 0xa0:	//variant type array
 					return "[]";
@@ -623,7 +623,7 @@ namespace Mono.ILDasm {
 
 				for (int i = 0; i < chars.Length; i++) {
 					var bytes = BitConverter.GetBytes (chars[i]);
-					if (BitConverter.IsLittleEndian)
+					if (!BitConverter.IsLittleEndian)
 						Array.Reverse (bytes);
 
 					bytearray[i * 2] = bytes[0];
