@@ -154,17 +154,133 @@ namespace Mono.ILDasm {
 			if (marshalInfo is SafeArrayMarshalInfo)
 				return Stringize ((SafeArrayMarshalInfo) marshalInfo);
 
-			return Stringize(marshalInfo.NativeType);
+			return Stringize (marshalInfo.NativeType);
 		}
 
 		public static string Stringize (CustomMarshalInfo mInfo)
 		{
-			throw new NotImplementedException ();
+			var sb = new StringBuilder ();
+
+			sb.Append ("custom (");
+
+			if (mInfo.UnmanagedType != null && !mInfo.UnmanagedType.Equals (string.Empty))
+				sb.AppendFormat ("\"{0}\"", mInfo.UnmanagedType);
+			else 
+				sb.AppendFormat ("\"{0}, {1}\"", mInfo.ManagedType.FullName, mInfo.ManagedType.Scope);
+
+			sb.AppendFormat (", \"{0}\")", mInfo.Cookie);
+
+			return sb.ToString ();
 		}
 
 		public static string Stringize (SafeArrayMarshalInfo mInfo)
 		{
-			throw new NotImplementedException ();
+			var sb = new StringBuilder ();
+
+			sb.Append ("safearray ");
+			sb.Append (Stringize (mInfo.ElementType));
+
+			return sb.ToString ();
+		}
+
+		public static string Stringize (VariantType vType)
+		{
+			switch (vType) {
+			case VariantType.Bool:
+				return "bool";
+			case VariantType.BStr:
+				return "bstr";
+			case VariantType.CY:
+				return "currency";
+			case VariantType.Date:
+				return "currency";
+			case VariantType.Decimal:
+				return "decimal";
+			case VariantType.Dispatch:
+				return "idispatch";
+			case VariantType.Error:
+				return "error";
+			case VariantType.I1:
+				return "int8";
+			case VariantType.I2:
+				return "int16";
+			case VariantType.I4:
+				return "int32";
+			case VariantType.Int:
+				return "int";
+			case VariantType.R4:
+				return "float32";
+			case VariantType.R8:
+				return "float64";
+			case VariantType.UI1:
+				return "unsigned int8";
+			case VariantType.UI2:
+				return "unsigned int16";
+			case VariantType.UI4:
+				return "unsigned int32";
+			case VariantType.UInt:
+				return "unsigned int";
+			case VariantType.Unknown:
+				return "iunknown";
+			case VariantType.Variant:
+				return "variant";
+			case VariantType.None:
+				return string.Empty;
+			default:	
+						//TODO: following variant types are not supported in cecil,
+						//but we can still disassemble them
+				switch ((int) vType) {
+				case 0xa0:	//variant type array
+					return "[]";
+				case 0x41:
+					return "blob";
+				case 0x46:
+					return "blob_object";
+				case 0xc0:	//variant type byref
+					return "&";
+				case 0x1c:
+					return "carray";
+				case 0x47:
+					return "cf";
+				case 0x48:
+					return "clsid";
+				case 0x40:
+					return "filetime";
+				case 0x19:
+					return "hresult";
+				case 0x14:
+					return "int64";
+				case 0x1e:
+					return "lpstr";
+				case 0x1f:
+					return "lpwstr";
+				case 0x01: //varian type null
+					return "null";
+				case 0x1a: //variant type ptr
+					return "*";
+				case 0x24:
+					return "record";
+				case 0x1b:
+					return "safearray";
+				case 0x43:
+					return "storage";
+				case 0x45:
+					return "stored_object";
+				case 0x42:
+					return "stream";
+				case 0x44:
+					return "streamed_object";
+				case 0x15:
+					return "unsigned int64";
+				case 0x1d:
+					return "userdefined";
+				case 0x90:
+					return "vector";
+				case 0x18:
+					return "void";
+				}
+				throw new ArgumentException (vType.ToString());
+			}
 		}
 
 		public static string Stringize (NativeType nType)
@@ -366,60 +482,60 @@ namespace Mono.ILDasm {
 
 		public static string NumberToHexString (sbyte val)
 		{
-			return string.Format ("{0}", val.ToString ("X2"));
+			return string.Format ("0x{0}", val.ToString ("X2"));
 		}
 
 		public static string NumberToHexString (byte val)
 		{
-			return string.Format ("{0}", val.ToString ("X2"));
+			return string.Format ("0x{0}", val.ToString ("X2"));
 		}
 
 		public static string NumberToHexString (float val, bool convertToBigEndian = true)
 		{
-			return bytesToHex (BitConverter.GetBytes (val), convertToBigEndian);
+			return BytesToHex (BitConverter.GetBytes (val), convertToBigEndian);
 		}
 
 		public static string NumberToHexString (double val, bool convertToBigEndian = true)
 		{
-			return bytesToHex (BitConverter.GetBytes (val), convertToBigEndian);
+			return BytesToHex (BitConverter.GetBytes (val), convertToBigEndian);
 		}
 
 		public static string NumberToHexString (short val, bool convertToBigEndian = true)
 		{
-			return bytesToHex (BitConverter.GetBytes (val), convertToBigEndian);
+			return BytesToHex (BitConverter.GetBytes (val), convertToBigEndian);
 		}
 
 		public static string NumberToHexString (ushort val, bool convertToBigEndian = true)
 		{
-			return bytesToHex (BitConverter.GetBytes (val), convertToBigEndian);
+			return BytesToHex (BitConverter.GetBytes (val), convertToBigEndian);
 		}
 
 		public static string NumberToHexString (int val, bool convertToBigEndian = true)
 		{
-			return bytesToHex (BitConverter.GetBytes (val), convertToBigEndian);
+			return BytesToHex (BitConverter.GetBytes (val), convertToBigEndian);
 		}
 
 		public static string NumberToHexString (uint val, bool convertToBigEndian = true)
 		{
-			return bytesToHex (BitConverter.GetBytes (val), convertToBigEndian);
+			return BytesToHex (BitConverter.GetBytes (val), convertToBigEndian);
 		}
 
 		public static string NumberToHexString (long val, bool convertToBigEndian = true)
 		{
-			return bytesToHex (BitConverter.GetBytes (val), convertToBigEndian);
+			return BytesToHex (BitConverter.GetBytes (val), convertToBigEndian);
 		}
 
 		public static string NumberToHexString (ulong val, bool convertToBigEndian = true)
 		{
-			return bytesToHex (BitConverter.GetBytes (val), convertToBigEndian);
+			return BytesToHex (BitConverter.GetBytes (val), convertToBigEndian);
 		}
 
 		public static string NumberToHexString (char val, bool convertToBigEndian = true)
 		{
-			return bytesToHex (BitConverter.GetBytes (val), convertToBigEndian);
+			return BytesToHex (BitConverter.GetBytes (val), convertToBigEndian);
 		}
 
-		private static string bytesToHex(byte[] bytes, bool convertToBigEndian = true)
+		private static string BytesToHex(byte[] bytes, bool convertToBigEndian = true)
 		{
 			if (BitConverter.IsLittleEndian && convertToBigEndian)
 				Array.Reverse (bytes);
@@ -492,14 +608,14 @@ namespace Mono.ILDasm {
 					return NumberToHexString ((UInt64) val);
 			default:
 				throw new ArgumentException ("val");
-			};
-        }
+			}
+		}
 
 		public static string Stringize (String str)
 		{
 			var chars = str.ToCharArray ();
 
-			if (Array.Exists<char> (chars, x => (int) x > 0x7f)) { //handle non-ASCII
+			if (Array.Exists (chars, x => (int) x > 0x7f)) { //handle non-ASCII
 				var sb = new StringBuilder ();
 				var bytearray = new byte[chars.Length * 2];
 
@@ -526,11 +642,11 @@ namespace Mono.ILDasm {
 			var sb = new StringBuilder ();
 
 			if (param.IsIn)
-				sb.Append ("[in]");
+				sb.Append ("[in] ");
 			if (param.IsOptional)
-				sb.Append ("[opt]");
+				sb.Append ("[opt] ");
 			if (param.IsOut)
-				sb.Append ("[out]");
+				sb.Append ("[out] ");
 
 			sb.Append (Stringize (param.ParameterType));
 

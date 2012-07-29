@@ -1530,6 +1530,12 @@ marshal_info		:
 					ElementType = (VariantType) $2,
 				};
 			}
+			| K_SAFEARRAY
+			{
+				$$ = new SafeArrayMarshalInfo {
+					ElementType = VariantType.None,
+				};
+			}
 			| OPEN_BRACKET int32 CLOSE_BRACKET
 			{
 				$$ = new ArrayMarshalInfo() {
@@ -1628,6 +1634,7 @@ variant_type		: K_NULL
 			| unsigned_int64
 			| STAR
 			| variant_type OPEN_BRACKET CLOSE_BRACKET
+			| OPEN_BRACKET CLOSE_BRACKET
 			| variant_type K_VECTOR
 			| variant_type AMPERSAND
 			| K_LPSTR
@@ -1694,7 +1701,7 @@ field_decl		: D_FIELD repeat_opt field_attr marshal_spec type id at_opt init_opt
 					mapping.Add (field, dataLoc);
 				}
 
-				if ($8 != null)
+				if ($8 != null) 
 					field.Constant = $8 is Null ? null : $8;
 
 				if (isGlobal)

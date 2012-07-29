@@ -257,7 +257,7 @@ namespace Mono.ILDasm {
 		{
 			var needNewLine = false;
 			for (int i = 0; i < method.Parameters.Count; i++) {
-				var param = method.Parameters[i];
+				var param = method.Parameters [i];
 				if (param.HasDefault) {
 					needNewLine = true;
 
@@ -470,7 +470,7 @@ namespace Mono.ILDasm {
 						Writer.Write (Stringize ((FieldReference) arg));
 					} else if (arg is string) {
 						Writer.Write ("\"{0}\"", EscapeQString ((string) arg));
-					} else
+					} else  // Integers and floats.
 						Writer.Write (Stringize ((ValueType) arg, true));
 				}
 				
