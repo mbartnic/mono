@@ -241,7 +241,9 @@ namespace Mono.ILDasm {
 				Writer.Dedent ();
 			
 			Writer.OpenBracket ();
-			
+
+			if (method.HasCustomAttributes)
+				WriteCustomAttributes (method.CustomAttributes);
 			WriteEntryPoint ();
 			WriteDefaultParameterValues ();
 			WriteMaxStack ();

@@ -187,7 +187,8 @@ namespace Mono.ILDasm {
 			}
 			
 			Writer.OpenBracket ();
-			
+
+			WriteCustomAttributes ();
 			WriteLayoutInfo ();
 			WriteNestedTypes ();
 			WriteFields ();
@@ -197,6 +198,20 @@ namespace Mono.ILDasm {
 			
 			Writer.CloseBracket ();
 			Writer.WriteLine ();
+		}
+
+		void WriteCustomAttributes ()
+		{
+			if (type.HasCustomAttributes) {
+				foreach (var ca in type.CustomAttributes) {
+					Writer.WriteIndented (".custom {0}", Stringize (ca.Constructor));
+
+					var blob = ToByteList (ca.GetBlob ());
+
+					Writer.WriteLine (" = {0}", blob);
+					Writer.WriteLine ();
+				}
+			}
 		}
 		
 		void WriteLayoutInfo ()
@@ -277,8 +292,11 @@ namespace Mono.ILDasm {
 				Writer.WriteLine (")");
 				
 				// TODO: Write property constant.
-				
+
 				Writer.OpenBracket ();
+
+				if (prop.HasCustomAttributes)
+					WriteCustomAttributes (prop.CustomAttributes);
 				
 				if (prop.GetMethod != null)
 					Writer.WriteIndentedLine (".get {0}",

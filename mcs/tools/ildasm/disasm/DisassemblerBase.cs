@@ -30,6 +30,7 @@ using System.Text;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using System.Collections.Generic;
+using Mono.Collections.Generic;
 
 namespace Mono.ILDasm {
 	internal abstract class DisassemblerBase {
@@ -549,6 +550,17 @@ namespace Mono.ILDasm {
 			return sb.ToString ();
 		}
 
+		public static string Stringize (CustomAttributeArgument arg)
+		{
+			switch (arg.Type.Name.ToLowerInvariant ()){
+			case "string":
+				//break;
+			default:
+
+				throw new NotImplementedException ();
+			}
+		}
+
 		public static string Stringize (ValueType val, bool shortForm = false)
 		{
 			var result = new StringBuilder ();
@@ -880,6 +892,15 @@ namespace Mono.ILDasm {
 		public static string Stringize (Instruction instr)
 		{
 			return instr.MakeLabel () + ": " + instr.OpCode;
+		}
+
+		public void WriteCustomAttributes (ICollection<CustomAttribute> customAttributes)
+		{
+			foreach (var ca in customAttributes) {
+				var blob = ToByteList (ca.GetBlob ());
+				Writer.WriteIndentedLine (".custom {0} = {1}", Stringize (ca.Constructor), blob);
+			}
+			Writer.WriteLine ();
 		}
 	}
 }

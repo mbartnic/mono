@@ -123,9 +123,11 @@ namespace Mono.ILDasm {
 				else
 					Writer.Write ("nullref");
 			}
-			
+
 			Writer.WriteLine ();
-			Writer.WriteLine ();
+
+			if (field.HasCustomAttributes)
+				WriteCustomAttributes (field.CustomAttributes);
 		}
 	}
 }

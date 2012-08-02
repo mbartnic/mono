@@ -74,7 +74,7 @@ namespace Mono.ILDasm {
 				return;
 			
 			var asm = module.Assembly.Name;
-			
+						
 			if (ShowMetadataTokens)
 				Writer.WriteLine ("// MDT: {0}", asm.MetadataToken);
 			
@@ -85,6 +85,9 @@ namespace Mono.ILDasm {
 			
 			Writer.WriteLine (Escape (asm.Name));
 			Writer.OpenBracket ();
+
+			if (module.Assembly.HasCustomAttributes)
+				WriteCustomAttributes (module.Assembly.CustomAttributes);
 			
 			if (asm.HasPublicKey) {
 				Writer.WriteIndentedLine (".publickey =");
