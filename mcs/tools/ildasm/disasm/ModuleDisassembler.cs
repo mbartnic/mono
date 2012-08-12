@@ -211,9 +211,9 @@ namespace Mono.ILDasm {
 				return;
 			
 			foreach (var rsc in module.Resources) {
-				Writer.WriteLine ("Resource: {0}", rsc.Name);
-				Writer.WriteLine ("Type: {0}", rsc.ResourceType);
-				Writer.WriteLine ("Flags: {0}", rsc.Attributes);
+				Writer.WriteLine ("// Resource: {0}", rsc.Name);
+				Writer.WriteLine ("// Type: {0}", rsc.ResourceType);
+				Writer.WriteLine ("// Flags: {0}", rsc.Attributes);
 				
 				Writer.WriteLine (".mresource ");
 				
@@ -232,12 +232,14 @@ namespace Mono.ILDasm {
 					var asmRsc = (AssemblyLinkedResource) rsc;
 					Writer.WriteLine (".assembly extern {0}", Escape (asmRsc.Assembly.Name));
 				} else if (rsc is EmbeddedResource) {
-					//var embRsc = (EmbeddedResource) rsc;
-					// TODO: Write to a separate file and include.
-					// TODO: Aliasing of the file name.
+					var embRsc = (EmbeddedResource) rsc;
+					var s = File.Create (rsc.Name);
+					var data = embRsc.GetResourceData ();
+					s.Write (data, 0, data.Length);
+					s.Close ();
 				} else {
 					var lnkRsc = (LinkedResource) rsc;
-					// TODO: Write the real file offset.
+					// all resource files not embedded in assembly are linked as file with offset 0
 					Writer.Write (".file {0} at 0", Escape (lnkRsc.File));
 				}
 				
@@ -248,3 +250,4 @@ namespace Mono.ILDasm {
 		}
 	}
 }
+
