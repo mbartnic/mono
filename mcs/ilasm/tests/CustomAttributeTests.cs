@@ -31,10 +31,10 @@ namespace Mono.ILAsm.Tests {
 	[TestFixture]
 	public class CustomAttributeTests : AssemblerTester {
 		[Test]
-		public void TestSimpleAttribute ()
+		public void TestSimpleAttribute (string defaultInput = "custom/custom-001.il")
 		{
 			ILAsm ()
-				.Input ("custom/custom-001.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -43,10 +43,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestAttributeByteBlob ()
+		public void TestAttributeByteBlob (string defaultInput = "custom/custom-002.il")
 		{
 			ILAsm ()
-				.Input ("custom/custom-002.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -57,10 +57,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestAttributeStringBlob ()
+		public void TestAttributeStringBlob (string defaultInput = "custom/custom-003.il")
 		{
 			ILAsm ()
-				.Input ("custom/custom-003.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()

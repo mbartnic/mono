@@ -1,10 +1,10 @@
 // 
-// Tuple.cs
+// PropertyTests.cs
 //  
 // Author:
-//       Alex Rønne Petersen <xtzgzorex@gmail.com>
+//       mbartnic <${AuthorEmail}>
 // 
-// Copyright (c) 2011 Alex Rønne Petersen
+// Copyright (c) 2012 mbartnic
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,27 +23,41 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+using System;
+using NUnit.Framework;
 
-namespace Mono.ILDasm.Tests {
-	internal class Tuple<T1, T2> {
-		public Tuple (T1 x, T2 y)
+namespace Mono.ILDasm.Tests
+{
+	[TestFixture]
+	public class PropertyTests : DisassemblerTester	{
+		Mono.ILAsm.Tests.PropertyTests t = new Mono.ILAsm.Tests.PropertyTests ();
+		
+		[Test]
+		public void TestSimpleProperty ()
 		{
-			X = x;
-			Y = y;
+			t.TestSimpleProperty ();
+			t.TestSimpleProperty (ILDism()
+				.Input(t.LastAssembledFile)
+				.Run().OutputFileName);
 		}
 		
-		public T1 X { get; set; }
-		
-		public T2 Y { get; set; }
-	}
-	
-	internal class Tuple<T1, T2, T3> : Tuple<T1, T2> {
-		public Tuple (T1 x, T2 y, T3 z)
-			: base (x, y)
+		[Test]
+		public void TestPropertyWithAccessors ()
 		{
-			Z = z;
+			t.TestPropertyWithAccessors ();
+			t.TestPropertyWithAccessors (ILDism()
+				.Input(t.LastAssembledFile)
+				.Run().OutputFileName);
 		}
 		
-		public T3 Z { get; set; }
+		[Test]
+		public void TestPropertyWithOtherMethods ()
+		{
+			t.TestPropertyWithOtherMethods ();
+			t.TestPropertyWithOtherMethods (ILDism()
+				.Input(t.LastAssembledFile)
+				.Run().OutputFileName);
+		}
 	}
 }
+

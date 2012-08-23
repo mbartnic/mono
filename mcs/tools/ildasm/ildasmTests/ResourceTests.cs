@@ -1,5 +1,5 @@
 // 
-// MarshalTester.cs
+// ResourceTests.cs
 //  
 // Author:
 //       mbartnic <${AuthorEmail}>
@@ -26,25 +26,55 @@
 using System;
 using NUnit.Framework;
 
-namespace Mono.ILDasm.Tests {
+namespace Mono.ILDasm.Tests
+{
 	[TestFixture]
-	public class MarshalTester :DisassemblerTester {
+	public class ResourceTests : DisassemblerTester	{
+		Mono.ILAsm.Tests.ResourceTests t = new Mono.ILAsm.Tests.ResourceTests ();
+		
 		[Test]
-		public void TestParameter_Array_NoType ()
+		public void TestAssemblyExternResource ()
 		{
-			ILDism ()
-				.ILFileAsInput (@"marshal/marshal_fields_.il", Target.Dll)
-				.Run ()
-				.Verify ();
+			t.TestAssemblyExternResource ();
+			t.TestAssemblyExternResource (ILDism()
+				.Input(t.LastAssembledFile)
+				.Run().OutputFileName);
 		}
 		
 		[Test]
-		public void Test_marshal_fields_001 ()
+		public void TestFileResource ()
 		{
-			ILDism ()
-				.ILFileAsInput (@"Tests/marshal/marshal_fields_001.il", Target.Dll)
-				.Run ()
-				.Verify ();
+			t.TestFileResource ();
+			t.TestFileResource (ILDism()
+				.Input(t.LastAssembledFile)
+				.Run().OutputFileName);
+		}
+		
+		[Test]
+		public void TestInsaneDefaultResourceVisibility ()
+		{
+			t.TestInsaneDefaultResourceVisibility ();
+			t.TestInsaneDefaultResourceVisibility (ILDism()
+				.Input(t.LastAssembledFile)
+				.Run().OutputFileName);
+		}
+		
+		[Test]
+		public void TestEmbeddedResource ()
+		{
+			t.TestEmbeddedResource ();
+			t.TestEmbeddedResource (ILDism()
+				.Input(t.LastAssembledFile)
+				.Run().OutputFileName);
+		}
+		
+		[Test]
+		public void TestAliasedResource ()
+		{
+			t.TestAliasedResource ();
+			t.TestAliasedResource (ILDism()
+				.Input(t.LastAssembledFile)
+				.Run().OutputFileName);
 		}
 	}
 }

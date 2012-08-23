@@ -1,10 +1,10 @@
 // 
-// Null.cs
+// CustomAttributeTests.cs
 //  
 // Author:
-//       Alex Rønne Petersen <xtzgzorex@gmail.com>
+//       mbartnic <${AuthorEmail}>
 // 
-// Copyright (c) 2011 Alex Rønne Petersen
+// Copyright (c) 2012 mbartnic
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,11 +24,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using NUnit.Framework;
 
-namespace Mono.ILDasm.Tests {
-	internal struct Null {
-	}
-	
-	internal struct TypedNull<T> {
+namespace Mono.ILDasm.Tests
+{
+	[TestFixture]
+	public sealed class CustomAttributeTests : DisassemblerTester {
+		
+		Mono.ILAsm.Tests.CustomAttributeTests t = new Mono.ILAsm.Tests.CustomAttributeTests ();
+		
+		[Test]
+		public void TestSimpleAttribute ()
+		{
+			t.TestSimpleAttribute ();
+			t.TestSimpleAttribute (ILDism()
+				.Input(t.LastAssembledFile)
+				.Run().OutputFileName);
+		}
+		
+		[Test]
+		public void TestAttributeByteBlob ()
+		{
+			t.TestAttributeByteBlob ();
+			t.TestAttributeByteBlob (ILDism()
+				.Input(t.LastAssembledFile)
+				.Run().OutputFileName);
+		}
+		
+		[Test]
+		public void TestAttributeStringBlob ()
+		{
+			t.TestAttributeStringBlob ();
+			t.TestAttributeStringBlob (ILDism()
+				.Input(t.LastAssembledFile)
+				.Run().OutputFileName);
+		}
 	}
 }
+

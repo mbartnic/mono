@@ -1,10 +1,10 @@
 // 
-// Label.cs
+// NamespaceTests.cs
 //  
 // Author:
-//       Alex Rønne Petersen <xtzgzorex@gmail.com>
+//       mbartnic <${AuthorEmail}>
 // 
-// Copyright (c) 2011 Alex Rønne Petersen
+// Copyright (c) 2012 mbartnic
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,17 +24,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using Mono.Cecil.Cil;
+using NUnit.Framework;
 
-namespace Mono.ILDasm.Tests {
-	internal sealed class Label {
-		public string Name { get; private set; }
+namespace Mono.ILDasm.Tests
+{
+	[TestFixture]
+	public class NamespaceTests : DisassemblerTester
+	{
+		Mono.ILAsm.Tests.NamespaceTests t = new Mono.ILAsm.Tests.NamespaceTests ();
 		
-		public Instruction Instruction { get; set; }
-		
-		public Label (string name)
+		[Test]
+		public void TestNamespaceDirective ()
 		{
-			Name = name;
+			t.TestNamespaceDirective ();
+			t.TestNamespaceDirective (ILDism()
+				.Input(t.LastAssembledFile)
+				.Run().OutputFileName);
+		}
+		
+		[Test]
+		public void TestNestedNamespaceDirectives ()
+		{
+			t.TestNestedNamespaceDirectives ();
+			t.TestNestedNamespaceDirectives (ILDism()
+				.Input(t.LastAssembledFile)
+				.Run().OutputFileName);
+		}
+		
+		[Test]
+		public void TestDottedNamespaceDirectives ()
+		{
+			t.TestDottedNamespaceDirectives ();
+			t.TestDottedNamespaceDirectives (ILDism()
+				.Input(t.LastAssembledFile)
+				.Run().OutputFileName);
 		}
 	}
 }
+

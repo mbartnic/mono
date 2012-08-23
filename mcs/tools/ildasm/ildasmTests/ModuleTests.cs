@@ -1,10 +1,10 @@
 // 
-// Target.cs
+// ModuleTests.cs
 //  
 // Author:
-//       Alex Rønne Petersen <xtzgzorex@gmail.com>
+//       mbartnic <${AuthorEmail}>
 // 
-// Copyright (c) 2011 Novell, Inc (http://www.novell.com)
+// Copyright (c) 2012 mbartnic
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,49 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using NUnit.Framework;
 
-namespace Mono.ILDasm.Tests {
-	public enum Target : byte {
-		Exe,
-		Dll,
+namespace Mono.ILDasm.Tests
+{
+	[TestFixture]
+	public class ModuleTests : DisassemblerTester	{
+		Mono.ILAsm.Tests.ModuleTests t = new Mono.ILAsm.Tests.ModuleTests();
+		
+		[Test]
+		public void TestModuleDirective ()
+		{	
+			t.TestModuleDirective ();
+			t.TestModuleDirective (ILDism()
+				.Input(t.LastAssembledFile)
+				.Run().OutputFileName);
+		}
+		
+		[Test]
+		public void TestMultipleModuleDirectives ()
+		{
+			t.TestMultipleModuleDirectives ();
+			t.TestMultipleModuleDirectives (ILDism()
+				.Input(t.LastAssembledFile)
+				.Run().OutputFileName);
+		}
+		
+		[Test]
+		public void TestModuleExternDirective ()
+		{
+			t.TestModuleExternDirective ();
+			t.TestModuleExternDirective (ILDism()
+				.Input(t.LastAssembledFile)
+				.Run().OutputFileName);
+		}
+		
+		[Test]
+		public void TestDuplicateModuleExternDirective ()
+		{
+			t.TestDuplicateModuleExternDirective ();
+			t.TestDuplicateModuleExternDirective (ILDism()
+				.Input(t.LastAssembledFile)
+				.Run().OutputFileName);
+		}
 	}
 }
+

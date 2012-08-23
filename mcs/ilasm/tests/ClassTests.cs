@@ -31,10 +31,10 @@ namespace Mono.ILAsm.Tests {
 	[TestFixture]
 	public sealed class ClassTests : AssemblerTester {
 		[Test]
-		public void TestSimpleClassDirective ()
+		public void TestSimpleClassDirective (string defaultInput = "class/class-001.il")
 		{
 			ILAsm ()
-				.Input ("class/class-001.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -44,10 +44,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestValueTypeClassDirective ()
+		public void TestValueTypeClassDirective (string defaultInput = "class/class-002.il")
 		{
 			ILAsm ()
-				.Input ("class/class-002.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -55,10 +55,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestEnumClassDirective ()
+		public void TestEnumClassDirective (string defaultInput = "class/class-003.il")
 		{
 			ILAsm ()
-				.Input ("class/class-003.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -66,10 +66,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestInterfaceImplementation ()
+		public void TestInterfaceImplementation (string defaultInput = "class/class-004.il")
 		{
 			ILAsm ()
-				.Input ("class/class-004.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -78,10 +78,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestMultipleInterfaceImplementations ()
+		public void TestMultipleInterfaceImplementations (string defaultInput = "class/class-005.il")
 		{
 			ILAsm ()
-				.Input ("class/class-005.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -91,10 +91,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestSimpleClassInheritance ()
+		public void TestSimpleClassInheritance (string defaultInput = "class/class-006.il")
 		{
 			ILAsm ()
-				.Input ("class/class-006.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -102,10 +102,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestInterfaceClassDirective ()
+		public void TestInterfaceClassDirective (string defaultInput = "class/class-007.il")
 		{
 			ILAsm ()
-				.Input ("class/class-007.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -113,10 +113,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestSimpleInterfaceImplementation ()
+		public void TestSimpleInterfaceImplementation (string defaultInput = "class/class-008.il")
 		{
 			ILAsm ()
-				.Input ("class/class-008.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -125,10 +125,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestGenericValueTypeConstraint ()
+		public void TestGenericValueTypeConstraint (string defaultInput = "class-generic/class-generic-001.il")
 		{
 			ILAsm ()
-				.Input ("class-generic/class-generic-001.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -137,10 +137,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestGenericReferenceTypeConstraint ()
+		public void TestGenericReferenceTypeConstraint (string defaultInput = "class-generic/class-generic-002.il")
 		{
 			ILAsm ()
-				.Input ("class-generic/class-generic-002.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -149,10 +149,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestGenericConstructorConstraint ()
+		public void TestGenericConstructorConstraint (string defaultInput = "class-generic/class-generic-003.il")
 		{
 			ILAsm ()
-				.Input ("class-generic/class-generic-003.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -161,10 +161,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestGenericInterfaceImplementation ()
+		public void TestGenericInterfaceImplementation (string defaultInput = "class-generic/class-generic-004.il")
 		{
 			ILAsm ()
-				.Input ("class-generic/class-generic-004.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -173,10 +173,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestGenericClassDirective ()
+		public void TestGenericClassDirective (string defaultInput = "class-generic/class-generic-005.il")
 		{
 			ILAsm ()
-				.Input ("class-generic/class-generic-005.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -186,10 +186,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestGenericInterfaceConstraint ()
+		public void TestGenericInterfaceConstraint (string defaultInput = "class-generic/class-generic-006.il")
 		{
 			ILAsm ()
-				.Input ("class-generic/class-generic-006.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -199,10 +199,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestCovariantTypeParameter ()
+		public void TestCovariantTypeParameter (string defaultInput = "class-generic/class-generic-007.il")
 		{
 			ILAsm ()
-				.Input ("class-generic/class-generic-007.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -211,10 +211,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestContravariantTypeParameter ()
+		public void TestContravariantTypeParameter (string defaultInput = "class-generic/class-generic-008.il")
 		{
 			ILAsm ()
-				.Input ("class-generic/class-generic-008.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -223,10 +223,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestNonPowerOfTwoClassPackSize ()
+		public void TestNonPowerOfTwoClassPackSize (string defaultInput = "class-layout/class-layout-001.il")
 		{
 			ILAsm ()
-				.Input ("class-layout/class-layout-001.il")
+				.Input (defaultInput)
 				.ExpectError (Error.InvalidPackSize)
 				.Run ()
 				.Expect (ExitCode.Error);
@@ -243,10 +243,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestClassPackSize ()
+		public void TestClassPackSize (string defaultInput = "class-layout/class-layout-003.il")
 		{
 			ILAsm ()
-				.Input ("class-layout/class-layout-003.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -254,10 +254,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestPackSizeInAutoLayoutClass ()
+		public void TestPackSizeInAutoLayoutClass (string defaultInput = "class-layout/class-layout-004.il")
 		{
 			ILAsm ()
-				.Input ("class-layout/class-layout-004.il")
+				.Input (defaultInput)
 				.ExpectWarning (Warning.LayoutInfoInAutoLayoutType)
 				.Run ()
 				.Expect (ExitCode.Success)
@@ -266,10 +266,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestClassSize ()
+		public void TestClassSize (string defaultInput = "class-layout/class-layout-005.il")
 		{
 			ILAsm ()
-				.Input ("class-layout/class-layout-005.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -277,10 +277,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestMinusOneClassSize ()
+		public void TestMinusOneClassSize (string defaultInput = "class-layout/class-layout-006.il")
 		{
 			ILAsm ()
-				.Input ("class-layout/class-layout-006.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()

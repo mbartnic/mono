@@ -40,10 +40,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestSimpleEvent ()
+		public void TestSimpleEvent (string defaultInput = "event/event-002.il")
 		{
 			ILAsm ()
-				.Input ("event/event-002.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -54,10 +54,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestEventWithFireMethod ()
+		public void TestEventWithFireMethod (string defaultInput = "event/event-003.il")
 		{
 			ILAsm ()
-				.Input ("event/event-003.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -66,10 +66,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestEventWithOtherMethods ()
+		public void TestEventWithOtherMethods (string defaultInput = "event/event-004.il")
 		{
 			ILAsm ()
-				.Input ("event/event-004.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()

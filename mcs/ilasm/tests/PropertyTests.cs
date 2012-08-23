@@ -30,10 +30,10 @@ namespace Mono.ILAsm.Tests {
 	[TestFixture]
 	public class PropertyTests : AssemblerTester {
 		[Test]
-		public void TestSimpleProperty ()
+		public void TestSimpleProperty (string defaultInput = "property/property-001.il")
 		{
 			ILAsm ()
-				.Input ("property/property-001.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -62,10 +62,10 @@ namespace Mono.ILAsm.Tests {
 		*/
 		
 		[Test]
-		public void TestPropertyWithAccessors ()
+		public void TestPropertyWithAccessors (string defaultInput = "property/property-003.il")
 		{
 			ILAsm ()
-				.Input ("property/property-003.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -75,10 +75,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestPropertyWithOtherMethods ()
+		public void TestPropertyWithOtherMethods (string defaultInput = "property/property-004.il")
 		{
 			ILAsm ()
-				.Input ("property/property-004.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()

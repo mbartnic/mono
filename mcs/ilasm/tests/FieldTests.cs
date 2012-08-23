@@ -31,10 +31,10 @@ namespace Mono.ILAsm.Tests {
 	[TestFixture]
 	public sealed class FieldTests : AssemblerTester {
 		[Test]
-		public void TestStaticModuleField ()
+		public void TestStaticModuleField (string defaultInput = "field/field-001.il")
 		{
 			ILAsm ()
-				.Input ("field/field-001.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -43,10 +43,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestModuleField ()
+		public void TestModuleField (string defaultInput = "field/field-002.il")
 		{
 			ILAsm ()
-				.Input ("field/field-002.il")
+				.Input (defaultInput)
 				.ExpectWarning (Warning.GlobalFieldMadeStatic)
 				.Run ()
 				.Expect (ExitCode.Success)
@@ -56,10 +56,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestModuleFieldWithOffset ()
+		public void TestModuleFieldWithOffset (string defaultInput = "field/field-003.il")
 		{
 			ILAsm ()
-				.Input ("field/field-003.il")
+				.Input (defaultInput)
 				.ExpectWarning (Warning.GlobalFieldOffsetIgnored)
 				.Run ()
 				.Expect (ExitCode.Success)
@@ -69,10 +69,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestClassField ()
+		public void TestClassField (string defaultInput = "field/field-004.il")
 		{
 			ILAsm ()
-				.Input ("field/field-004.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -81,10 +81,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestClassFieldWithOffset ()
+		public void TestClassFieldWithOffset (string defaultInput = "field/field-005.il")
 		{
 			ILAsm ()
-				.Input ("field/field-005.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -93,10 +93,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestMultipleClassFieldsWithOffsets ()
+		public void TestMultipleClassFieldsWithOffsets (string defaultInput = "field/field-006.il")
 		{
 			ILAsm ()
-				.Input ("field/field-006.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -117,10 +117,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestVectorField ()
+		public void TestVectorField (string defaultInput = "field-array/field-array-001.il")
 		{
 			ILAsm ()
-				.Input ("field-array/field-array-001.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -129,10 +129,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestUnboundedArray ()
+		public void TestUnboundedArray (string defaultInput = "field-array/field-array-002.il")
 		{
 			ILAsm ()
-				.Input ("field-array/field-array-002.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -141,10 +141,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestLowerBoundedArray ()
+		public void TestLowerBoundedArray (string defaultInput = "field-array/field-array-003.il")
 		{
 			ILAsm ()
-				.Input ("field-array/field-array-003.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -154,10 +154,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestBoundedArray ()
+		public void TestBoundedArray (string defaultInput = "field-array/field-array-004.il")
 		{
 			ILAsm ()
-				.Input ("field-array/field-array-004.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -167,10 +167,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestSizedArray ()
+		public void TestSizedArray (string defaultInput = "field-array/field-array-005.il")
 		{
 			ILAsm ()
-				.Input ("field-array/field-array-005.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -180,10 +180,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestNegativeSizedArray ()
+		public void TestNegativeSizedArray (string defaultInput = "field-array/field-array-006.il")
 		{
 			ILAsm ()
-				.Input ("field-array/field-array-006.il")
+				.Input (defaultInput)
 				.ExpectWarning (Warning.NegativeArraySize)
 				.Run ()
 				.Expect (ExitCode.Success)
@@ -194,10 +194,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestGenericField ()
+		public void TestGenericField (string defaultInput = "field-generic/field-generic-001.il")
 		{
 			ILAsm ()
-				.Input ("field-generic/field-generic-001.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -206,10 +206,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestGenericOrdinalField ()
+		public void TestGenericOrdinalField (string defaultInput = "field-generic/field-generic-002.il")
 		{
 			ILAsm ()
-				.Input ("field-generic/field-generic-002.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()

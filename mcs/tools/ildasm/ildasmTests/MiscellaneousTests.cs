@@ -1,10 +1,10 @@
 // 
-// QualifiedName.cs
+// MiscellaneousTests.cs
 //  
 // Author:
-//       Alex Rønne Petersen <xtzgzorex@gmail.com>
+//       mbartnic <${AuthorEmail}>
 // 
-// Copyright (c) 2011 Alex Rønne Petersen
+// Copyright (c) 2012 mbartnic
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,59 +24,49 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Collections.Generic;
-using System.Text;
+using NUnit.Framework;
 
-namespace Mono.ILDasm.Tests {
-	internal sealed class QualifiedName {
-		public QualifiedName ()
+namespace Mono.ILDasm.Tests
+{
+	[TestFixture]
+	public class MiscellaneousTests : DisassemblerTester {
+		Mono.ILAsm.Tests.MiscellaneousTests t = new Mono.ILAsm.Tests.MiscellaneousTests ();
+		
+		[Test]
+		public void TestFileAlignment ()
 		{
-			Name = string.Empty;
-			Namespaces = new List<string> ();
-			Nestings = new List<string> ();
+			t.TestFileAlignment ();
+			t.TestFileAlignment (ILDism()
+				.Input(t.LastAssembledFile)
+				.Run().OutputFileName);
 		}
 		
-		public string Name { get; set; }
-		
-		public List<string> Namespaces { get; private set; }
-		
-		public List<string> Nestings { get; private set; }
-		
-		public string FullNamespace {
-			get {
-				var ns = new StringBuilder ();
-				
-				for (var i = 0; i < Namespaces.Count; i++) {
-					ns.Append (Namespaces [i]);
-					
-					if (i != Namespaces.Count - 1)
-						ns.Append (".");
-				}
-				
-				return ns.ToString ();
-			}
-		}
-		
-		public string FullName {
-			get {
-				var name = new StringBuilder (FullNamespace);
-				if (name.Length > 0)
-					name.Append (".");
-				
-				foreach (var nesting in Nestings) {
-					name.Append (nesting);
-					name.Append ("/");
-				}
-				
-				name.Append (Name);
-				
-				return name.ToString ();
-			}
-		}
-		
-		public override string ToString ()
+		[Test]
+		public void TestImageBase ()
 		{
-			return FullName;
+			t.TestImageBase ();
+			t.TestImageBase (ILDism()
+				.Input(t.LastAssembledFile)
+				.Run().OutputFileName);
+		}
+		
+		[Test]
+		public void TestStackReserve ()
+		{
+			t.TestStackReserve ();
+			t.TestStackReserve (ILDism()
+				.Input(t.LastAssembledFile)
+				.Run().OutputFileName);
+		}
+		
+		[Test]
+		public void TestPreprocessor ()
+		{
+			t.TestPreprocessor ();
+			t.TestPreprocessor (ILDism()
+				.Input(t.LastAssembledFile)
+				.Run().OutputFileName);
 		}
 	}
 }
+

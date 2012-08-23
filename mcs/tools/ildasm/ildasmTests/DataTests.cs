@@ -1,10 +1,10 @@
 // 
-// NamespaceTests.cs
+// DataTests.cs
 //  
 // Author:
-//       Alex Rønne Petersen <xtzgzorex@gmail.com>
+//       mbartnic <${AuthorEmail}>
 // 
-// Copyright (c) 2011 Alex Rønne Petersen
+// Copyright (c) 2012 mbartnic
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,43 +26,56 @@
 using System;
 using NUnit.Framework;
 
-namespace Mono.ILAsm.Tests {
+namespace Mono.ILDasm.Tests
+{
 	[TestFixture]
-	public sealed class NamespaceTests : AssemblerTester {
+	public class DataTests : DisassemblerTester	{
+		Mono.ILAsm.Tests.DataTests t = new Mono.ILAsm.Tests.DataTests();
+		
 		[Test]
-		public void TestNamespaceDirective (string defaultInput = "namespace/namespace-001.il")
+		public void TestSimpleDataConstant ()
 		{
-			ILAsm ()
-				.Input (defaultInput)
-				.ExpectWarning (Warning.LegacyNamespaceSyntax)
-				.Run ()
-				.Expect (ExitCode.Success)
-				.GetModule ()
-				.Expect (x => x.GetType ("test001.test001_cls") != null);
+			t.TestSimpleDataConstant ();
+			t.TestSimpleDataConstant (ILDism()
+				.Input(t.LastAssembledFile)
+				.Run().OutputFileName);
 		}
 		
 		[Test]
-		public void TestNestedNamespaceDirectives (string defaultInput = "namespace/namespace-002.il")
+		public void TestRepeatedDataConstant ()
 		{
-			ILAsm ()
-				.Input (defaultInput)
-				.ExpectWarning (Warning.LegacyNamespaceSyntax)
-				.Run ()
-				.Expect (ExitCode.Success)
-				.GetModule ()
-				.Expect (x => x.GetType ("test002.B.C.test002_cls") != null);
+			t.TestRepeatedDataConstant ();
+			t.TestRepeatedDataConstant (ILDism()
+				.Input(t.LastAssembledFile)
+				.Run().OutputFileName);
 		}
 		
 		[Test]
-		public void TestDottedNamespaceDirectives (string defaultInput = "namespace/namespace-003.il")
+		public void TestUnlabeledDataConstant ()
 		{
-			ILAsm ()
-				.Input (defaultInput)
-				.ExpectWarning (Warning.LegacyNamespaceSyntax)
-				.Run ()
-				.Expect (ExitCode.Success)
-				.GetModule ()
-				.Expect (x => x.GetType ("test003.B.C.D.E.F.test003_cls") != null);
+			t.TestUnlabeledDataConstant ();
+			t.TestUnlabeledDataConstant (ILDism()
+				.Input(t.LastAssembledFile)
+				.Run().OutputFileName);
+		}
+		
+		[Test]
+		public void TestUninitializedDataConstant ()
+		{
+			t.TestUninitializedDataConstant ();
+			t.TestUninitializedDataConstant (ILDism()
+				.Input(t.LastAssembledFile)
+				.Run().OutputFileName);
+		}
+		
+		[Test]
+		public void TestDataField ()
+		{
+			t.TestDataField ();
+			t.TestDataField (ILDism()
+				.Input(t.LastAssembledFile)
+				.Run().OutputFileName);
 		}
 	}
 }
+

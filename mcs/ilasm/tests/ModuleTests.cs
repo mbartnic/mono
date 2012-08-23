@@ -30,10 +30,10 @@ namespace Mono.ILAsm.Tests {
 	[TestFixture]
 	public sealed class ModuleTests : AssemblerTester {
 		[Test]
-		public void TestModuleDirective ()
+		public void TestModuleDirective (string defaultInput = "module/module-001.il")
 		{
 			ILAsm ()
-				.Input ("module/module-001.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -41,10 +41,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestMultipleModuleDirectives ()
+		public void TestMultipleModuleDirectives (string defaultInput = "module/module-002.il")
 		{
 			ILAsm ()
-				.Input ("module/module-002.il")
+				.Input (defaultInput)
 				.ExpectWarning (Warning.ModuleDirectiveIgnored)
 				.Run ()
 				.Expect (ExitCode.Success)
@@ -52,10 +52,10 @@ namespace Mono.ILAsm.Tests {
 				.Expect (x => x.Name == "test002");
 		}
 		[Test]
-		public void TestModuleExternDirective ()
+		public void TestModuleExternDirective (string defaultInput = "module-extern/module-extern-001.il")
 		{
 			ILAsm ()
-				.Input ("module-extern/module-extern-001.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -64,10 +64,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestDuplicateModuleExternDirective ()
+		public void TestDuplicateModuleExternDirective (string defaultInput = "module-extern/module-extern-002.il")
 		{
 			ILAsm ()
-				.Input ("module-extern/module-extern-002.il")
+				.Input (defaultInput)
 				.ExpectWarning (Warning.ModuleReferenceIgnored)
 				.Run ()
 				.Expect (ExitCode.Success);

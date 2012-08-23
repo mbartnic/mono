@@ -31,10 +31,10 @@ namespace Mono.ILAsm.Tests {
 	[TestFixture]
 	public class ResourceTests : AssemblerTester {
 		[Test]
-		public void TestAssemblyExternResource ()
+		public void TestAssemblyExternResource (string defaultInput = "mresource/mresource-001.il")
 		{
 			ILAsm ()
-				.Input ("mresource/mresource-001.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -44,10 +44,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestFileResource ()
+		public void TestFileResource (string defaultInput = "mresource/mresource-002.il")
 		{
 			ILAsm ()
-				.Input ("mresource/mresource-002.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -57,10 +57,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestInsaneDefaultResourceVisibility ()
+		public void TestInsaneDefaultResourceVisibility (string defaultInput = "mresource/mresource-003.il")
 		{
 			ILAsm ()
-				.Input ("mresource/mresource-003.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -70,10 +70,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestEmbeddedResource ()
+		public void TestEmbeddedResource (string defaultInput = "mresource/mresource-004.il")
 		{
 			ILAsm ()
-				.Input ("mresource/mresource-004.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -82,10 +82,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestAliasedResource ()
+		public void TestAliasedResource (string defaultInput = "mresource/mresource-005.il")
 		{
 			ILAsm ()
-				.Input ("mresource/mresource-005.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
