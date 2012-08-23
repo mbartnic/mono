@@ -32,10 +32,10 @@ namespace Mono.ILAsm.Tests {
 	[TestFixture]
 	public sealed class MethodTests : AssemblerTester {
 		[Test]
-		public void TestSimpleMethod ()
+		public void TestSimpleMethod (string defaultInput = "method/method-001.il")
 		{
 			ILAsm ()
-				.Input ("method/method-001.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -45,20 +45,20 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestEmptyMethod ()
+		public void TestEmptyMethod (string defaultInput = "method/method-002.il")
 		{
 			ILAsm ()
-				.Input ("method/method-002.il")
+				.Input (defaultInput)
 				.ExpectWarning (Warning.DefaultReturnEmitted)
 				.Run ()
 				.Expect (ExitCode.Success);
 		}
 		
 		[Test]
-		public void TestParametrizedMethod ()
+		public void TestParametrizedMethod (string defaultInput = "method/method-003.il")
 		{
 			ILAsm ()
-				.Input ("method/method-003.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -69,10 +69,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestGenericMethod ()
+		public void TestGenericMethod (string defaultInput = "method-generic/method-generic-001.il")
 		{
 			ILAsm ()
-				.Input ("method-generic/method-generic-001.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -83,10 +83,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestGenericMethodWithGenericReturnType ()
+		public void TestGenericMethodWithGenericReturnType (string defaultInput = "method-generic/method-generic-002.il")
 		{
 			ILAsm ()
-				.Input ("method-generic/method-generic-002.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -95,10 +95,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestGenericMethodWithGenericParameterType ()
+		public void TestGenericMethodWithGenericParameterType (string defaultInput = "method-generic/method-generic-003.il")
 		{
 			ILAsm ()
-				.Input ("method-generic/method-generic-003.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -143,10 +143,10 @@ namespace Mono.ILAsm.Tests {
 		*/
 		
 		[Test]
-		public void TestMethodLocalsWithInit ()
+		public void TestMethodLocalsWithInit (string defaultInput = "method-body/method-body-003.il")
 		{
 			ILAsm ()
-				.Input ("method-body/method-body-003.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -155,10 +155,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestMethodWithZeroInit ()
+		public void TestMethodWithZeroInit (string defaultInput = "method-body/method-body-004.il")
 		{
 			ILAsm ()
-				.Input ("method-body/method-body-004.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -167,10 +167,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestEntryPointMethod ()
+		public void TestEntryPointMethod (string defaultInput = "method-body/method-body-005.il")
 		{
 			ILAsm ()
-				.Input ("method-body/method-body-005.il")
+				.Input (defaultInput)
 				.Exe ()
 				.Run ()
 				.Expect (ExitCode.Success)
@@ -206,10 +206,10 @@ namespace Mono.ILAsm.Tests {
 		*/
 		
 		[Test]
-		public void TestNoOperandInstructions ()
+		public void TestNoOperandInstructions (string defaultInput = "method-body/method-body-008.il")
 		{
 			ILAsm ()
-				.Input ("method-body/method-body-008.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success);
 		}
@@ -255,10 +255,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestParameterOperand ()
+		public void TestParameterOperand (string defaultInput = "method-body/method-body-013.il")
 		{
 			ILAsm ()
-				.Input ("method-body/method-body-013.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()

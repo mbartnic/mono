@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Mono.ILAsm.Tests</RootNamespace>
     <AssemblyName>tests</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\class\mono.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
@@ -35,14 +35,14 @@
   <ItemGroup>
     <Reference Include="System">
     </Reference>
-    <Reference Include="Mono.Cecil, Version=0.9.4.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
-      <HintPath>..\..\class\lib\net_2_0\Mono.Cecil.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil.Mdb, Version=0.9.4.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
-      <HintPath>..\..\class\lib\net_2_0\Mono.Cecil.Mdb.dll</HintPath>
-    </Reference>
     <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
       <HintPath>..\..\class\lib\net_2_0\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+      <HintPath>..\..\class\lib\net_2_0\Mono.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil.Mdb, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+      <HintPath>..\..\class\lib\net_2_0\Mono.Cecil.Mdb.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -72,12 +72,6 @@
     <Compile Include="MethodTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <ProjectReference Include="..\ilasm.csproj">
-      <Project>{3F8EC7C8-7F63-4341-AE4F-859CED50CE07}</Project>
-      <Name>ilasm</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup>
     <None Include="tests\assembly\assembly-001.il" />
     <None Include="tests\assembly\assembly-002.il" />
@@ -188,6 +182,56 @@
     <None Include="tests\custom\custom-002.il" />
     <None Include="tests\custom\custom-003.il" />
     <None Include="tests\assembly\assembly-008.il" />
+    <None Include="tests\marshal\marshal-custom-001.il" />
+    <None Include="tests\marshal\marshal-custom-002.il" />
+    <None Include="tests\marshal\marshal-custom-003.il" />
+    <None Include="tests\marshal\marshal-custom-004.il" />
+    <None Include="tests\marshal\marshal-custom-005.il" />
+    <None Include="tests\marshal\marshal-custom-006.il" />
+    <None Include="tests\marshal\marshal-fields-001.il" />
+    <None Include="tests\marshal\marshal-fields.il" />
+    <None Include="tests\marshal\marshal-safearray-001.il" />
+    <None Include="tests\marshal\marshal-safearray-002.il" />
+    <None Include="tests\marshal\marshal-safearray-003.il" />
+    <None Include="tests\marshal\marshal-safearray-004.il" />
+    <None Include="tests\marshal\marshal-safearray-005.il" />
+    <None Include="tests\marshal\marshal-safearray-006.il" />
+    <None Include="tests\marshal\marshal-safearray-007.il" />
+    <None Include="tests\marshal\marshal-safearray-008.il" />
+    <None Include="tests\marshal\marshal-safearray-009.il" />
+    <None Include="tests\marshal\marshal-safearray-010.il" />
+    <None Include="tests\marshal\marshal-safearray-012.il" />
+    <None Include="tests\marshal\marshal-safearray-013.il" />
+    <None Include="tests\marshal\marshal-safearray-014.il" />
+    <None Include="tests\marshal\marshal-safearray-015.il" />
+    <None Include="tests\marshal\marshal-safearray-016.il" />
+    <None Include="tests\marshal\marshal-safearray-017.il" />
+    <None Include="tests\marshal\marshal-safearray-018.il" />
+    <None Include="tests\marshal\marshal-safearray-019.il" />
+    <None Include="tests\marshal\marshal-safearray-020.il" />
+    <None Include="tests\marshal\marshal-safearray-021.il" />
+    <None Include="tests\marshal\marshal-native-type-001.il" />
+    <None Include="tests\marshal\marshal-native-type-002.il" />
+    <None Include="tests\marshal\marshal-native-type-003.il" />
+    <None Include="tests\marshal\marshal-native-type-004.il" />
+    <None Include="tests\marshal\marshal-native-type-005.il" />
+    <None Include="tests\marshal\marshal-native-type-006.il" />
+    <None Include="tests\marshal\marshal-native-type-007.il" />
+    <None Include="tests\marshal\marshal-native-type-008.il" />
+    <None Include="tests\marshal\marshal-native-type-009.il" />
+    <None Include="tests\marshal\marshal-native-type-010.il" />
+    <None Include="tests\marshal\marshal-native-type-011.il" />
+    <None Include="tests\marshal\marshal-native-type-012.il" />
+    <None Include="tests\marshal\marshal-misc-001.il" />
+    <None Include="tests\marshal\marshal-misc-002.il" />
+    <None Include="tests\marshal\marshal-misc-003.il" />
+    <None Include="tests\marshal\marshal-misc-004.il" />
+    <None Include="tests\marshal\marshal-misc-005.il" />
+    <None Include="tests\field\field-constants-001.il" />
+    <None Include="tests\field\field-constants-002.il" />
+    <None Include="tests\field\field-constants-003.il" />
+    <None Include="tests\method-param\method-param-001.il" />
+    <None Include="tests\custom\custom-field-001.il" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="tests\assembly\" />
@@ -212,5 +256,12 @@
     <Folder Include="tests\method-generic\" />
     <Folder Include="tests\method-body\" />
     <Folder Include="tests\custom\" />
+    <Folder Include="tests\method-param\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ilasm.csproj">
+      <Project>{3F8EC7C8-7F63-4341-AE4F-859CED50CE07}</Project>
+      <Name>ilasm</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

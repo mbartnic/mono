@@ -34,11 +34,22 @@ using NUnit.Framework;
 
 namespace Mono.ILAsm.Tests {
 	public abstract class AssemblerTester {
+		public delegate bool ModulePredicate (ModuleDefinition module);
+		
 		public static string BasePath { get; set; }
+		
+		public string LastAssembledFile {get; private set;}
 
 		static AssemblerTester ()
 		{
 			BasePath = "../../";
+		}
+		
+		public delegate void UpdateAssembledFile(string fileName);
+		
+		public void SetLastAssembledFile(string fileName)
+		{
+			LastAssembledFile = fileName;
 		}
 		
 		protected sealed class Assembler {
@@ -49,8 +60,12 @@ namespace Mono.ILAsm.Tests {
 			Error? resulting_error;
 			Warning? resulting_warning;
 			
-			public Assembler ()
+			UpdateAssembledFile update = null;
+			
+			public Assembler (UpdateAssembledFile updateMethod)
 			{
+				update = updateMethod;
+				
 				driver = new Driver ();
 				driver.Target = Target.Dll;
 				driver.DebuggingInfo = true;
@@ -198,6 +213,7 @@ namespace Mono.ILAsm.Tests {
 				Assert.AreEqual (expected_warning, resulting_warning);
 				Assert.AreEqual (expected_error, resulting_error);
 				
+				update(driver.OutputFileName);
 				return new AssemblerOutput (driver.OutputFileName, driver.DebuggingInfo, result);
 			}
 		}
@@ -228,8 +244,6 @@ namespace Mono.ILAsm.Tests {
 			}
 		}
 		
-		public delegate bool ModulePredicate (ModuleDefinition module);
-		
 		protected sealed class AssembledModule {
 			public AssembledModule (string fileName, bool debug)
 			{
@@ -256,7 +270,7 @@ namespace Mono.ILAsm.Tests {
 		
 		protected Assembler ILAsm ()
 		{
-			return new Assembler ();
+			return new Assembler (SetLastAssembledFile);
 		}
 	}
 }

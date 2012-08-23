@@ -30,10 +30,10 @@ namespace Mono.ILAsm.Tests {
 	[TestFixture]
 	public sealed class NamespaceTests : AssemblerTester {
 		[Test]
-		public void TestNamespaceDirective ()
+		public void TestNamespaceDirective (string defaultInput = "namespace/namespace-001.il")
 		{
 			ILAsm ()
-				.Input ("namespace/namespace-001.il")
+				.Input (defaultInput)
 				.ExpectWarning (Warning.LegacyNamespaceSyntax)
 				.Run ()
 				.Expect (ExitCode.Success)
@@ -42,10 +42,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestNestedNamespaceDirectives ()
+		public void TestNestedNamespaceDirectives (string defaultInput = "namespace/namespace-002.il")
 		{
 			ILAsm ()
-				.Input ("namespace/namespace-002.il")
+				.Input (defaultInput)
 				.ExpectWarning (Warning.LegacyNamespaceSyntax)
 				.Run ()
 				.Expect (ExitCode.Success)
@@ -54,10 +54,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestDottedNamespaceDirectives ()
+		public void TestDottedNamespaceDirectives (string defaultInput = "namespace/namespace-003.il")
 		{
 			ILAsm ()
-				.Input ("namespace/namespace-003.il")
+				.Input (defaultInput)
 				.ExpectWarning (Warning.LegacyNamespaceSyntax)
 				.Run ()
 				.Expect (ExitCode.Success)

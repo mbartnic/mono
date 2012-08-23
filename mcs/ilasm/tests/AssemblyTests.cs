@@ -32,10 +32,10 @@ namespace Mono.ILAsm.Tests {
 	[TestFixture]
 	public sealed class AssemblyTests : AssemblerTester {
 		[Test]
-		public void TestEmptyAssemblyDirective ()
+		public void TestEmptyAssemblyDirective (string defaultInput = "assembly/assembly-001.il")
 		{
 			ILAsm ()
-				.Input ("assembly/assembly-001.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -43,10 +43,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestFullAssemblyDirective ()
+		public void TestFullAssemblyDirective (string defaultInput = "assembly/assembly-002.il")
 		{
 			ILAsm ()
-				.Input ("assembly/assembly-002.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -61,10 +61,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestRawLocale ()
+		public void TestRawLocale (string defaultInput = "assembly/assembly-003.il")
 		{
 			ILAsm ()
-				.Input ("assembly/assembly-003.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -72,20 +72,20 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestMultipleAssemblyDirectives ()
+		public void TestMultipleAssemblyDirectives (string defaultInput = "assembly/assembly-004.il")
 		{
 			ILAsm ()
-				.Input ("assembly/assembly-004.il")
+				.Input (defaultInput)
 				.ExpectError (Error.MultipleAssemblyDirectives)
 				.Run ()
 				.Expect (ExitCode.Error);
 		}
 		
 		[Test]
-		public void TestRetargetableAssembly ()
+		public void TestRetargetableAssembly (string defaultInput = "assembly/assembly-005.il")
 		{
 			ILAsm ()
-				.Input ("assembly/assembly-005.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -93,28 +93,28 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestMiscellaneousAssemblyAttributes ()
+		public void TestMiscellaneousAssemblyAttributes (string defaultInput = "assembly/assembly-006.il")
 		{
 			ILAsm ()
-				.Input ("assembly/assembly-006.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success);
 		}
 		
 		[Test]
-		public void TestInvalidAssemblyHashAlgorithm ()
+		public void TestInvalidAssemblyHashAlgorithm (string defaultInput = "assembly/assembly-007.il")
 		{
 			ILAsm ()
-				.Input ("assembly/assembly-007.il")
+				.Input (defaultInput)
 				.ExpectWarning (Warning.UnknownHashAlgorithm)
 				.Run ()
 				.Expect (ExitCode.Success);
 		}
 		[Test]
-		public void TestEmptyAssemblyExternDirective ()
+		public void TestEmptyAssemblyExternDirective (string defaultInput = "assembly-extern/assembly-extern-001.il")
 		{
 			ILAsm ()
-				.Input ("assembly-extern/assembly-extern-001.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -123,10 +123,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestFullAssemblyExternDirective ()
+		public void TestFullAssemblyExternDirective (string defaultInput = "assembly-extern/assembly-extern-002.il")
 		{
 			ILAsm ()
-				.Input ("assembly-extern/assembly-extern-002.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -144,10 +144,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestAssemblyExternDirectiveWithPublicKey ()
+		public void TestAssemblyExternDirectiveWithPublicKey (string defaultInput = "assembly-extern/assembly-extern-003.il")
 		{
 			ILAsm ()
-				.Input ("assembly-extern/assembly-extern-003.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -159,10 +159,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestAssemblyExternDirectiveWithPublicKeyAndToken ()
+		public void TestAssemblyExternDirectiveWithPublicKeyAndToken (string defaultInput = "assembly-extern/assembly-extern-004.il")
 		{
 			ILAsm ()
-				.Input ("assembly-extern/assembly-extern-004.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()
@@ -175,10 +175,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestShadowedAssemblyExternDirective ()
+		public void TestShadowedAssemblyExternDirective (string defaultInput = "assembly-extern/assembly-extern-005.il")
 		{
 			ILAsm ()
-				.Input ("assembly-extern/assembly-extern-005.il")
+				.Input (defaultInput)
 				.ExpectWarning (Warning.AssemblyReferenceIgnored)
 				.Run ()
 				.Expect (ExitCode.Success)
@@ -188,10 +188,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestShadowedAssemblyExternAsDirective ()
+		public void TestShadowedAssemblyExternAsDirective (string defaultInput = "assembly-extern/assembly-extern-006.il")
 		{
 			ILAsm ()
-				.Input ("assembly-extern/assembly-extern-006.il")
+				.Input (defaultInput)
 				.ExpectWarning (Warning.AssemblyReferenceIgnored)
 				.Run ()
 				.Expect (ExitCode.Success)
@@ -201,10 +201,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestLocaleBytes ()
+		public void TestLocaleBytes (string defaultInput = "assembly/assembly-008.il")
 		{
 			ILAsm ()
-				.Input ("assembly/assembly-008.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success)
 				.GetModule ()

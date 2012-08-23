@@ -14,7 +14,6 @@ using System.Text;
 using System.Threading;
 using Mono.Cecil;
 using Mono.Cecil.Mdb;
-//using Mono.Cecil.Mdb;
 
 namespace Mono.ILDasm {
 	public sealed class Driver {

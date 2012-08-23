@@ -30,50 +30,50 @@ namespace Mono.ILAsm.Tests {
 	[TestFixture]
 	public sealed class DataTests : AssemblerTester {
 		[Test]
-		public void TestSimpleDataConstant ()
+		public void TestSimpleDataConstant (string defaultInput = "data/data-001.il")
 		{
 			ILAsm ()
-				.Input ("data/data-001.il")
+				.Input (defaultInput)
 				.ExpectWarning (Warning.UnimplementedFeatureUsed)
 				.Run ()
 				.Expect (ExitCode.Success);
 		}
 		
 		[Test]
-		public void TestRepeatedDataConstant ()
+		public void TestRepeatedDataConstant (string defaultInput = "data/data-002.il")
 		{
 			ILAsm ()
-				.Input ("data/data-002.il")
+				.Input (defaultInput)
 				.ExpectWarning (Warning.UnimplementedFeatureUsed)
 				.Run ()
 				.Expect (ExitCode.Success);
 		}
 		
 		[Test]
-		public void TestUnlabeledDataConstant ()
+		public void TestUnlabeledDataConstant (string defaultInput = "data/data-003.il")
 		{
 			ILAsm ()
-				.Input ("data/data-003.il")
+				.Input (defaultInput)
 				.ExpectWarning (Warning.UnimplementedFeatureUsed)
 				.Run ()
 				.Expect (ExitCode.Success);
 		}
 		
 		[Test]
-		public void TestUninitializedDataConstant ()
+		public void TestUninitializedDataConstant (string defaultInput = "data/data-004.il")
 		{
 			ILAsm ()
-				.Input ("data/data-004.il")
+				.Input (defaultInput)
 				.ExpectWarning (Warning.UnimplementedFeatureUsed)
 				.Run ()
 				.Expect (ExitCode.Success);
 		}
 		
 		[Test]
-		public void TestDataField ()
+		public void TestDataField (string defaultInput = "data/data-005.il")
 		{
 			ILAsm ()
-				.Input ("data/data-005.il")
+				.Input (defaultInput)
 				.ExpectWarning (Warning.UnimplementedFeatureUsed)
 				.Run ()
 				.Expect (ExitCode.Success)

@@ -27,7 +27,7 @@ using System;
 using System.Collections.Generic;
 
 namespace Mono.ILAsm.Tests {
-	internal static class Extensions {
+	public static class Extensions {
 		public static bool ListEquals<T> (this IList<T> list, IList<T> other)
 		{
 			if (list == null && other != null)

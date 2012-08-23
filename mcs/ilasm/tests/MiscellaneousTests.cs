@@ -32,28 +32,28 @@ namespace Mono.ILAsm.Tests {
 		// TODO: Verify functionality of all of these when Cecil supports it.
 		
 		[Test]
-		public void TestFileAlignment ()
+		public void TestFileAlignment (string defaultInput = "misc-decl/misc-decl-001.il")
 		{
 			ILAsm ()
-				.Input ("misc-decl/misc-decl-001.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success);
 		}
 		
 		[Test]
-		public void TestImageBase ()
+		public void TestImageBase (string defaultInput = "misc-decl/misc-decl-002.il")
 		{
 			ILAsm ()
-				.Input ("misc-decl/misc-decl-002.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success);
 		}
 		
 		[Test]
-		public void TestStackReserve ()
+		public void TestStackReserve (string defaultInput = "misc-decl/misc-decl-003.il")
 		{
 			ILAsm ()
-				.Input ("misc-decl/misc-decl-003.il")
+				.Input (defaultInput)
 				.Run ()
 				.Expect (ExitCode.Success);
 		}
@@ -89,10 +89,10 @@ namespace Mono.ILAsm.Tests {
 		}
 		
 		[Test]
-		public void TestPreprocessor ()
+		public void TestPreprocessor (string defaultInput = "misc-decl/misc-decl-007.il")
 		{
 			ILAsm ()
-				.Input ("misc-decl/misc-decl-007.il")
+				.Input (defaultInput)
 				.ExpectWarning (Warning.UnimplementedFeatureUsed)
 				.Run ()
 				.Expect (ExitCode.Success);
