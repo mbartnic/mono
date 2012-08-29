@@ -264,4 +264,10 @@
       <Name>ilasm</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ilasm.csproj">
+      <Project>{3F8EC7C8-7F63-4341-AE4F-859CED50CE07}</Project>
+      <Name>ilasm</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>
